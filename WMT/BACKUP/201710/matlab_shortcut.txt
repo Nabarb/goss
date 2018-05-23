@@ -1,0 +1,4 @@
+% add path for Gossweiler Exp
+run('V:\PROJECTS\Gossweiler\SW\PROGR\WMT_setPath')
+warning off;
+disp('WMT path added. Warning disabled')

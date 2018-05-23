@@ -1,0 +1,4 @@
+% add path for Gossweiler Exp
+run('C:\Users\Dell\Desktop\Gossweiler\SW\PROGR')
+warning off;
+disp('WMT path added. Warning disabled')
