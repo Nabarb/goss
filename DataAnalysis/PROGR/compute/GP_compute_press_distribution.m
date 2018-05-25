@@ -1,5 +1,6 @@
-function [hit_2b, fa_2b, hit_3b, fa_3b] = GP_pressDistribution_compute(file_opts)
-% function GP_compute_press_distribution calculates the distribution of press during hits and false alarms
+function [hit_2b, fa_2b, hit_3b, fa_3b] = GP_compute_press_distribution(file_opts)
+% function GP_compute_press_distribution calculates the distribution of 
+% press during hits and false alarms
 %
 % opts: structure containing options for file, data and analysis identification
 % 

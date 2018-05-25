@@ -33,7 +33,7 @@ if isempty(index1)
 elseif isempty(index2)
     error(['condition' condition 'not found for dataset' num2str(2)]);
 else    
-    figure(1000);
+    fig1000=figure(1000);
     title1 = dataset1(index1).condition_name;
     title1(title1== '_') = ' ';
     title2 = dataset2(index2).condition_name;
@@ -43,34 +43,35 @@ else
     title2 = 'post stimulation';
     
     for ii = 1:127
-        subplot(1,2,1); cla;
-        imagesc(dataset1(index1).time_axis, dataset1(index1).frequency_axis, squeeze(dataset1(index1).tf_map(ii,:,:)));
-        hold on;
-        line([0 0], [0 max(dataset1(index1).frequency_axis)], 'color', 'red', 'linestyle', '--','linewidth', 1);
-        line([500 500], [0 max(dataset1(index1).frequency_axis)], 'color', 'red', 'linestyle', '--','linewidth', 1);
-        title([title1 '     ' dataset1(index1).label{ii}]);
-        caxis([-50 50]);
-        xlabel('Time [ms]');
-        ylabel('Frequency [Hz]');
-        set(gca, 'fontweigh','bold');
+        ax1=subplot(fig1000,1,2,1); cla(ax1);
+        imagesc(ax1,dataset1(index1).time_axis, dataset1(index1).frequency_axis, squeeze(dataset1(index1).tf_map(ii,:,:)));
+        hold(ax1,'on');
+        line(ax1,[0 0], [0 max(dataset1(index1).frequency_axis)], 'color', 'red', 'linestyle', '--','linewidth', 1);
+        line(ax1,[500 500], [0 max(dataset1(index1).frequency_axis)], 'color', 'red', 'linestyle', '--','linewidth', 1);
+        title(ax1,[title1 '     ' dataset1(index1).label{ii}]);
+        caxis(ax1,[-50 50]);
+        xlabel(ax1,'Time [ms]');
+        ylabel(ax1,'Frequency [Hz]');
+        set(ax1, 'fontweigh','bold');
 
-        subplot(1,2,2); cla;
-        imagesc(dataset2(index2).time_axis, dataset2(index2).frequency_axis, squeeze(dataset2(index2).tf_map(ii,:,:)));
+        ax2=subplot(fig1000,1,2,2); cla(ax2);
+        imagesc(ax2,dataset2(index2).time_axis, dataset2(index2).frequency_axis, squeeze(dataset2(index2).tf_map(ii,:,:)));
         hold on;
-        line([0 0], [0 max(dataset2(index2).frequency_axis)], 'color', 'red', 'linestyle', '--','linewidth', 1);
-        line([500 500], [0 max(dataset2(index2).frequency_axis)], 'color', 'red', 'linestyle', '--','linewidth', 1);
-        title([title2 '     ' dataset2(index2).label{ii}]);
-        caxis([-50 50]);
-        xlabel('Time [ms]');        
-        ylabel('');
-        set(gca,'ytick', []);
-        set(gca, 'fontweigh','bold');
-        cb = colorbar; set(cb, 'position', [0.9297    0.1111    0.0286    0.8159]);
+        line(ax2,[0 0], [0 max(dataset2(index2).frequency_axis)], 'color', 'red', 'linestyle', '--','linewidth', 1);
+        line(ax2,[500 500], [0 max(dataset2(index2).frequency_axis)], 'color', 'red', 'linestyle', '--','linewidth', 1);
+        title(ax2,[title2 '     ' dataset2(index2).label{ii}]);
+        caxis(ax2,[-50 50]);
+        xlabel(ax2,'Time [ms]');        
+        ylabel(ax2,'');
+        set(ax2,'ytick', []);
+        set(ax2, 'fontweigh','bold');
+        cb = colorbar(ax2); 
+        set(cb, 'position', [0.9297    0.1111    0.0286    0.8159]);
         
 %         figName = ['erd_ers_sensor\' dataset1(index1).label{ii} '.png'];
-        figName = [dataset1(index1).label{ii} '.png'];
-        saveas(gcf, figName);
-        close(figure(1000));
+        figName = [dataset1(index1).label{ii} '.svg'];
+        saveas(fig1000, figName);
+        close(fig1000);
     end
 end
 
