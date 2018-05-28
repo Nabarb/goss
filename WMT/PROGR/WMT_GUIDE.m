@@ -52,7 +52,7 @@ set(handles.duration_edit,'visible','off');
 handles.rs_duration = 2;
 handles.phase = 'pre stimulation';
 handles.trialTime = 0.5;
-handles.itiTime = 2;
+handles.itiTime = 2.5;
 handles.nStim = 32;
 handles.nSeq = 130;
 handles.seq1.back = 2;
@@ -60,10 +60,12 @@ handles.seq2.back = 2;
 
 
 handles.sessionIN = daq.createSession('ni');
-addDigitalChannel(handles.sessionIN,'Dev3','Port0/Line0','InputOnly');
-handles.session = daq.createSession('ni');
-addDigitalChannel(handles.session,'Dev3','Port0/Line1:3','OutputOnly');
-outputSingleScan(handles.session,[0,0,0]);
+addDigitalChannel(handles.sessionIN,'Dev3','Port0/Line4','InputOnly');
+handles.sessionIN.NumberOfScans = 10000;
+
+handles.sessionOUT = daq.createSession('ni');
+addDigitalChannel(handles.sessionOUT,'Dev3','Port0/Line0:3','OutputOnly');
+outputSingleScan(handles.sessionOUT,[0,0,0,0]);
 
 % Update handles structure
 guidata(hObject, handles);
@@ -104,14 +106,14 @@ else
                 % send istructions
                 WMT_displayInstructions(handles.phase);
                 
-                outputSingleScan(handles.session,[1,0,0]);
+                outputSingleScan(handles.sessionOUT,[1,0,0,0]);
                 f = WMT_displayFixationCross;
                 tic;
                 while toc < 60*handles.rs_duration && isgraphics(f)
                     handles.actualDuration = toc;
                     drawnow;
                 end
-                outputSingleScan(handles.session,[0,0,0]);
+                outputSingleScan(handles.sessionOUT,[0,0,0,0]);
                 
                 WMT_displayInstructions('conclusion');
                 
@@ -127,7 +129,7 @@ else
         % WORKING MEMORY TASK
         message = {'STARTING EXPERIMENT:'; ['subject.......... ' get(handles.name_edit,'string')]; ['phase........... ' handles.phase]};
         response = questdlg(message,'','CONFIRM','RETURN','CONFIRM');
-        outputSingleScan(handles.session,[0,0,0]);
+        outputSingleScan(handles.sessionOUT,[0,0,0,0]);
         switch response
             case 'CONFIRM'
                 set(hObject,'enable','off');
@@ -147,14 +149,14 @@ else
                 if strcmp(handles.phase,'stimulation');   % if stimulation phase, begin with 2' of resting state potential
                     WMT_displayInstructions('resting state');
                     
-                    outputSingleScan(handles.session,[1,0,0]);
+                    outputSingleScan(handles.sessionOUT,[1,0,0,0]);
                     f = WMT_displayFixationCross;
                     tic;
                     while toc < 60*2 && isgraphics(f)
                         handles.actualDuration(1) = toc;
                         drawnow;
                     end
-                    outputSingleScan(handles.session,[0,0,0]);
+                    outputSingleScan(handles.sessionOUT,[0,0,0,0]);
                     
                     WMT_displayInstructions('conclusion');
                 end
@@ -162,21 +164,21 @@ else
                 % sequence 1
                 [handles.seq1.sequence,  handles.seq1.stimuli] = WMT_buildSequence(handles.nStim, handles.nSeq, handles.seq1.back);
                 WMT_displayInstructions(handles.phase, handles.seq1.back);
-                [handles.seq1.pressTime, seq1Completed] = WMT_displaySequence(handles.seq1.sequence, handles.seq1.stimuli, handles.trialTime, handles.itiTime, handles.sessionIN, handles.session);
+                [handles.seq1.pressTime, seq1Completed] = WMT_displaySequence(handles.seq1.sequence, handles.seq1.stimuli, handles.seq1.back, handles.trialTime, handles.itiTime, handles.sessionIN, handles.sessionOUT);
                 if seq1Completed
                     WMT_displayInstructions('conclusion');
                     
                     if strcmp(handles.phase,'stimulation');   % if stimulation phase, record 5' of resting state potential
                         WMT_displayInstructions('resting state');
                         
-                        outputSingleScan(handles.session,[1,0,0]);
+                        outputSingleScan(handles.sessionOUT,[1,0,0,0]);
                         f = WMT_displayFixationCross;
                         tic;
                         while toc < 60*5 && isgraphics(f)
                             handles.actualDuration(2) = toc;
                             drawnow;
                         end
-                        outputSingleScan(handles.session,[0,0,0]);
+                        outputSingleScan(handles.sessionOUT,[0,0,0,0]);
                         
                         WMT_displayInstructions('conclusion');
                     else
@@ -186,21 +188,21 @@ else
                     % sequence 2
                     [handles.seq2.sequence, handles.seq2.stimuli] = WMT_buildSequence(handles.nStim, handles.nSeq, handles.seq2.back);
                     WMT_displayInstructions(handles.phase, handles.seq2.back);
-                    [handles.seq2.pressTime, seq2Completed] = WMT_displaySequence(handles.seq2.sequence, handles.seq2.stimuli, handles.trialTime, handles.itiTime, handles.sessionIN, handles.session);
+                    [handles.seq2.pressTime, seq2Completed] = WMT_displaySequence(handles.seq2.sequence, handles.seq2.stimuli, handles.seq2.back, handles.trialTime, handles.itiTime, handles.sessionIN, handles.sessionOUT);
                     if seq2Completed
                         WMT_displayInstructions('conclusion');
                         
                         if strcmp(handles.phase,'stimulation');   % if stimulation phase, end with 2' of resting state potential
                             WMT_displayInstructions('resting state');
                             
-                            outputSingleScan(handles.session,[1,0,0]);
+                            outputSingleScan(handles.sessionOUT,[1,0,0,0]);
                             f = WMT_displayFixationCross;
                             tic;
                             while toc < 60*2 && isgraphics(f)
                                 handles.actualDuration(3) = toc;
                                 drawnow;
                             end
-                            outputSingleScan(handles.session,[0,0,0]);
+                            outputSingleScan(handles.sessionOUT,[0,0,0,0]);
                             
                             WMT_displayInstructions('conclusion');
                         end
@@ -372,9 +374,3 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
 end
 
 
-% --- Executes on button press in pb.
-function pb_Callback(hObject, eventdata, handles)
-% hObject    handle to pb (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-errordlg('suca!')

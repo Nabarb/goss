@@ -16,8 +16,7 @@ timeTh = data.itiTime - data.trialTime;
 performance = cell(1,2);
 SEQ = {data.seq1; data.seq2};
 for ii = 1:2
-    seq = SEQ{ii}; 
-    nStim = sum(seq.stimuli);
+    seq = SEQ{ii};    
     press = seq.pressTime < timeTh;    
     success = sum(press&seq.stimuli);
     corrIdx = find(press&seq.stimuli);
@@ -26,18 +25,15 @@ for ii = 1:2
     
     %%%%% adjust numbers if == 0 or == 1
     if hit == 1 % trick otherwise norminv = inf
-        hit = 1-1/(2*nStim); % a number close to 1
+        hit = (numel(seq.stimuli)-0.001)/numel(seq.stimuli); % a number colse to 1
     elseif hit == 0 % trick otherwise norminv = -inf
-        hit = 1/(2*nStim); % a number close to 0
+        hit = (1/numel(seq.stimuli))/1000; % a number close to 0
     end
     if falseAlarm == 1 % trick otherwise norminv = inf
-        falseAlarm =  1-1/(2*nStim); % a number close to 1
+        falseAlarm =  (numel(seq.stimuli)-0.001)/numel(seq.stimuli); % a number colse to 1
     elseif falseAlarm == 0 % trick otherwise norminv = -inf
-        falseAlarm = 1/(2*nStim); % a number close to 0
+        falseAlarm = (1/numel(seq.stimuli))/1000; % a number close to 0
     end
-        
-    % special cases: success = 100, false alarm = 0
-    % dPrime = norminv(1-1(2*n))-norminv(1/(2*n))
     %%%%%
     
     perf.percCorr = 100*hit;

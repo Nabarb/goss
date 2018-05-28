@@ -21,10 +21,11 @@ end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % TO BE CHECKED: my matlab adds ".rpt" to fileName
-idx = strfind(fileName, '.');
-if idx
-    fileName(idx:end) = '';
-end
+strrep(fileName,'.rpt','');
+% idx = strfind(fileName, '.');
+% if idx
+%     fileName(idx:end) = '';
+% end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 xlsData = {'subject', data.subject; 'date', data.date; 'start Time', datestr(data.startTime); 'end Time', datestr(data.endTime); 'phase', data.phase};

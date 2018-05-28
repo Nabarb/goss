@@ -1,4 +1,4 @@
-function [pressTime, seqCompleted] = WMT_displaySequence(sequence, stimulus, trialTime, ITI, sessionIN, sessionOUT)
+function [pressTime, seqCompleted] = WMT_displaySequence(sequence, stimulus, nBack, trialTime, ITI, sessionIN, sessionOUT)
 % function WMT_displaySequence displays a sequence of letters according to input parameters.
 %
 % sequence: letters to be displayed
@@ -14,25 +14,28 @@ function [pressTime, seqCompleted] = WMT_displaySequence(sequence, stimulus, tri
 seqCompleted = 0;
 
 f = figure(1000);
-set(gcf,'color','k','units','normalized','outerposition',[0 0 1 1]);
-set(gcf,'toolbar','none','menubar','none','dockcontrols','off','numbertitle','off','resize','off');
+set(f,'color','k','units','normalized','outerposition',[0 0 1 1]);
+set(f,'toolbar','none','menubar','none','dockcontrols','off','numbertitle','off','resize','off');
+
+nBack = nBack-2;
 
 pressTime = nan(1,numel(sequence));
 try
     pause(ITI-trialTime);
     for ii = 1:numel(sequence)
-        
-        figure(f);        
-        state = [1,1,stimulus(ii)];
-        outputSingleScan(sessionOUT,state);
-        annotation(gcf,'textbox',[0.35 1 0.05 0.05],'String',sequence(ii), 'FontSize',500,'color','w','edgecolor','k');
+        sessionOUT.prepare;        
+        state = fliplr([1,nBack,1,stimulus(ii)]);
+        outputSingleScan(sessionOUT,state); 
+        figure(f);
+        annotation(f,'textbox',[0.35 1 0.05 0.05],'String',sequence(ii), 'FontSize',500,'color','w','edgecolor','k');
         tic;
         pause(0.005);
+%         outputSingleScan(sessionOUT,state);
         while inputSingleScan(sessionIN) && toc<trialTime
-        end    
+        end
         pressTime(ii) = toc;
-        if toc<trialTime+0.001
-            pause(trialTime-toc); pause(0.005);
+        if toc<trialTime%+0.001
+            pause(trialTime-toc); %pause(0.005);
             clf;
             pause(ITI-trialTime);
         else
@@ -40,15 +43,15 @@ try
             while inputSingleScan(sessionIN) && toc<ITI
             end
             pressTime(ii) = toc;
-
-            pause(ITI-toc); pause(0.005);
+            
+            pause(ITI-toc); %pause(0.005);
         end
-        outputSingleScan(sessionOUT,[1,0,0]);
+%         outputSingleScan(sessionOUT,[1,0,0,0]);
     end
     toc
     close(f);
     seqCompleted = 1;
-    outputSingleScan(sessionOUT,[0,0,0]);
+    outputSingleScan(sessionOUT,[0,0,0,0]);
 catch
     errordlg('session stopped!');
 end

@@ -29,9 +29,9 @@ switch phase
 end
 
 f = figure(1000); 
-set(gcf,'color','w','units','normalized','outerposition',[0 0 1 1]); clf;
-set(gcf,'toolbar','none','menubar','none','dockcontrols','off','numbertitle','off','resize','off');
-annotation(gcf,'textbox',[0.1 0.1 0.8 0.8],'String',message, 'FontSize',40,'color','k','edgecolor','w');
+set(f,'color','w','units','normalized','outerposition',[0 0 1 1]); clf;
+set(f,'toolbar','none','menubar','none','dockcontrols','off','numbertitle','off','resize','off');
+annotation(f,'textbox',[0.1 0.1 0.8 0.8],'String',message, 'FontSize',40,'color','k','edgecolor','w');
 drawnow;
 
 WMT_getkey(timeout);
