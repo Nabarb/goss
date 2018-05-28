@@ -16,6 +16,13 @@ function marker = GP_find_triggers(fileName, freq, seqOrder)
 %   
 % FIELDTRIP needed to run this function
 %
+% Events list as logged in EEG data:
+%       E  1 : resting state
+%       E  2 : two back
+%       E  3 : three back
+%       S  2 : Letter
+%       S  3 : Stimulus
+%
 % Marianna Semprini
 % IIT, April 2018
 
@@ -27,9 +34,9 @@ cfg.dataset = fileName;
 
 % check the number of correct presses
 % E_ts = [event(find(strcmp('Experiment', {event.type}))).sample];
-S_ts = [event(find(strcmp('Stimulus', {event.type}))).sample];
-P_ts = [event(find(strcmp('Press', {event.type}))).sample];
-L_ts = [event(find(strcmp('Letter', {event.type}))).sample];
+S_ts = [event(find(strcmp('S  3', {event.value}))).sample];         % Stimulus!
+P_ts = [event(find(strcmp('Press', {event.type}))).sample];         % button press
+L_ts = [event(find(strcmp('Stimulus', {event.type}))).sample];      % letter presentation
 
 
 marker.seqType = seqOrder; % two or three back
