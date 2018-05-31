@@ -38,7 +38,7 @@ function WMT_GUIDE_OpeningFcn(hObject, eventdata, handles, varargin)
 % Choose default command line output for WMT_GUIDE
 handles.output = hObject;
 
-warning off;
+% warning off;
 set(handles.date_edit,'string',date);
 
 set(handles.ct_radiobutton,'value',1);
@@ -58,14 +58,23 @@ handles.nSeq = 130;
 handles.seq1.back = 2;
 handles.seq2.back = 2;
 
+try
+    handles.sessionIN = daq.createSession('ni');
+    addDigitalChannel(handles.sessionIN,'Dev3','Port0/Line4','InputOnly');
+    handles.sessionIN.NumberOfScans = 10000;
+    
+    handles.sessionOUT = daq.createSession('ni');
+    addDigitalChannel(handles.sessionOUT,'Dev3','Port0/Line0:3','OutputOnly');
+    outputSingleScan(handles.sessionOUT,[0,0,0,0]);
+catch error
+    handles.sessionOUT = 0;
+    handles.sessionIN = 0;
+    handles.nStim = 3;
+    handles.nSeq = 10;
+    warning(error.cause{1}.message)
+    warning('Debug mode on!')
+end
 
-handles.sessionIN = daq.createSession('ni');
-addDigitalChannel(handles.sessionIN,'Dev3','Port0/Line4','InputOnly');
-handles.sessionIN.NumberOfScans = 10000;
-
-handles.sessionOUT = daq.createSession('ni');
-addDigitalChannel(handles.sessionOUT,'Dev3','Port0/Line0:3','OutputOnly');
-outputSingleScan(handles.sessionOUT,[0,0,0,0]);
 
 % Update handles structure
 guidata(hObject, handles);
@@ -105,15 +114,18 @@ else
                 
                 % send istructions
                 WMT_displayInstructions(handles.phase);
-                
-                outputSingleScan(handles.sessionOUT,[1,0,0,0]);
+                if isobject(handles.sessionOUT)
+                    outputSingleScan(handles.sessionOUT,[1,0,0,0]);
+                end
                 f = WMT_displayFixationCross;
                 tic;
                 while toc < 60*handles.rs_duration && isgraphics(f)
                     handles.actualDuration = toc;
                     drawnow;
                 end
-                outputSingleScan(handles.sessionOUT,[0,0,0,0]);
+                if isobject(handles.sessionOUT)
+                    outputSingleScan(handles.sessionOUT,[0,0,0,0]);
+                end
                 
                 WMT_displayInstructions('conclusion');
                 
@@ -129,7 +141,11 @@ else
         % WORKING MEMORY TASK
         message = {'STARTING EXPERIMENT:'; ['subject.......... ' get(handles.name_edit,'string')]; ['phase........... ' handles.phase]};
         response = questdlg(message,'','CONFIRM','RETURN','CONFIRM');
-        outputSingleScan(handles.sessionOUT,[0,0,0,0]);
+        
+        if isobject(handles.sessionOUT)
+            outputSingleScan(handles.sessionOUT,[0,0,0,0]);
+        end
+        
         switch response
             case 'CONFIRM'
                 set(hObject,'enable','off');
@@ -148,15 +164,19 @@ else
                 
                 if strcmp(handles.phase,'stimulation');   % if stimulation phase, begin with 2' of resting state potential
                     WMT_displayInstructions('resting state');
-                    
-                    outputSingleScan(handles.sessionOUT,[1,0,0,0]);
+                    if isobject(handles.sessionOUT)
+                        outputSingleScan(handles.sessionOUT,[1,0,0,0]);
+                    end
                     f = WMT_displayFixationCross;
                     tic;
                     while toc < 60*2 && isgraphics(f)
                         handles.actualDuration(1) = toc;
                         drawnow;
                     end
-                    outputSingleScan(handles.sessionOUT,[0,0,0,0]);
+                    if isobject(handles.sessionOUT)
+                        
+                        outputSingleScan(handles.sessionOUT,[0,0,0,0]);
+                    end
                     
                     WMT_displayInstructions('conclusion');
                 end
@@ -168,18 +188,22 @@ else
                 if seq1Completed
                     WMT_displayInstructions('conclusion');
                     
-                    if strcmp(handles.phase,'stimulation');   % if stimulation phase, record 5' of resting state potential
+                    if strcmp(handles.phase,'stimulation')   % if stimulation phase, record 5' of resting state potential
                         WMT_displayInstructions('resting state');
-                        
-                        outputSingleScan(handles.sessionOUT,[1,0,0,0]);
+                        if isobject(handles.sessionOUT)
+                            
+                            outputSingleScan(handles.sessionOUT,[1,0,0,0]);
+                        end
                         f = WMT_displayFixationCross;
                         tic;
                         while toc < 60*5 && isgraphics(f)
                             handles.actualDuration(2) = toc;
                             drawnow;
                         end
-                        outputSingleScan(handles.sessionOUT,[0,0,0,0]);
-                        
+                        if isobject(handles.sessionOUT)
+                            
+                            outputSingleScan(handles.sessionOUT,[0,0,0,0]);
+                        end
                         WMT_displayInstructions('conclusion');
                     else
                         pause(5);
@@ -192,17 +216,22 @@ else
                     if seq2Completed
                         WMT_displayInstructions('conclusion');
                         
-                        if strcmp(handles.phase,'stimulation');   % if stimulation phase, end with 2' of resting state potential
+                        if strcmp(handles.phase,'stimulation')   % if stimulation phase, end with 2' of resting state potential
                             WMT_displayInstructions('resting state');
                             
-                            outputSingleScan(handles.sessionOUT,[1,0,0,0]);
+                            if isobject(handles.sessionOUT)
+                                outputSingleScan(handles.sessionOUT,[1,0,0,0]);
+                            end
                             f = WMT_displayFixationCross;
                             tic;
                             while toc < 60*2 && isgraphics(f)
                                 handles.actualDuration(3) = toc;
                                 drawnow;
                             end
-                            outputSingleScan(handles.sessionOUT,[0,0,0,0]);
+                            if isobject(handles.sessionOUT)
+                                
+                                outputSingleScan(handles.sessionOUT,[0,0,0,0]);
+                            end
                             
                             WMT_displayInstructions('conclusion');
                         end

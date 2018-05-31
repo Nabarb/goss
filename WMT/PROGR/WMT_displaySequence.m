@@ -23,16 +23,22 @@ pressTime = nan(2,numel(sequence));
 try
     pause(ITI-trialTime);
     for ii = 1:numel(sequence)
-        sessionOUT.prepare;        
-        state = ([nBack,1,stimulus(ii),1]);
-        outputSingleScan(sessionOUT,state);
+        
+        if isobject(sessionOUT)
+            sessionOUT.prepare;
+            state = ([nBack,1,stimulus(ii),1]);
+            outputSingleScan(sessionOUT,state);
+        end
         tic;
         figure(f);
         annotation(f,'textbox',[0.35 1 0.05 0.05],'String',sequence(ii), 'FontSize',500,'color','w','edgecolor','k');
         pressTime(2,ii)=toc;
         pause(0.005);
-%         outputSingleScan(sessionOUT,state);
-        while inputSingleScan(sessionIN) && toc<trialTime
+        %         outputSingleScan(sessionOUT,state);
+        if isobject(sessionIN)
+            
+            while inputSingleScan(sessionIN) && toc<trialTime
+            end
         end
         pressTime(1,ii) = toc;
         if toc<trialTime%+0.001
@@ -41,18 +47,27 @@ try
             pause(ITI-trialTime);
         else
             clf; pause(0.005);
-            while inputSingleScan(sessionIN) && toc<ITI
+            if isobject(handles.sessionIN)
+                
+                while inputSingleScan(sessionIN) && toc<ITI
+                end
             end
             pressTime(1,ii) = toc;
             
             pause(ITI-toc); %pause(0.005);
         end
-         outputSingleScan(sessionOUT,[nBack,1,0,0]);
+        if isobject(sessionOUT)
+            
+            outputSingleScan(sessionOUT,[nBack,1,0,0]);
+        end
     end
     toc
     close(f);
     seqCompleted = 1;
-    outputSingleScan(sessionOUT,[0,0,0,0]);
-catch
+    if isobject(sessionOUT)
+        
+        outputSingleScan(sessionOUT,[0,0,0,0]);
+    end
+catch error
     errordlg('session stopped!');
 end
