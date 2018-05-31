@@ -21,7 +21,7 @@ end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % TO BE CHECKED: my matlab adds ".rpt" to fileName
-fileName = strrep(fileName,'.rpt','');
+strrep(fileName,'.rpt','');
 % idx = strfind(fileName, '.');
 % if idx
 %     fileName(idx:end) = '';

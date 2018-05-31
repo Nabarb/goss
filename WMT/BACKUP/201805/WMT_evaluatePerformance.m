@@ -17,7 +17,6 @@ performance = cell(1,2);
 SEQ = {data.seq1; data.seq2};
 for ii = 1:2
     seq = SEQ{ii};    
-    nStim = sum(seq.stimuli);
     press = seq.pressTime(1,:) < timeTh;    
     success = sum(press&seq.stimuli);
     corrIdx = find(press&seq.stimuli);
@@ -36,8 +35,6 @@ for ii = 1:2
 %         falseAlarm = (1/numel(seq.stimuli))/1000; % a number close to 0
 %     end
 
-    perf.percCorr = 100*hit;
-
     if hit == 1 % trick otherwise norminv = inf
         hit = 1-1/(2*nStim); % a number close to 1
     elseif hit == 0 % trick otherwise norminv = -inf
@@ -50,6 +47,7 @@ for ii = 1:2
     end
     %%%%%
     
+    perf.percCorr = 100*hit;
     perf.reacTime = [mean(seq.pressTime(1,corrIdx)) std(seq.pressTime(1,corrIdx))];
     perf.dPrime = norminv(hit)-norminv(falseAlarm); % calculate Dprime as Z(Hit) - Z(falseAlarm) - the distance between hits and false alarms
     performance{ii} = perf;
