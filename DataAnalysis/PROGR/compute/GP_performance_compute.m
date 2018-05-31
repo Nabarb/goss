@@ -35,6 +35,9 @@ for ii = 1:2
     hit = performance(ind,1)/nStim;
     falseAlarm = performance(ind,3)/(nSeq - nStim);
     
+    perf.hit(ind) = hit;
+    perf.fa(ind) = falseAlarm;
+    
     %%%%% adjust numbers if == 0 or == 1
     if hit == 1 % trick otherwise norminv = inf
         hit = 1-1/(2*nStim); % a number close to 1
@@ -48,8 +51,6 @@ for ii = 1:2
     end
     
     perf.dPrime(ind) = norminv(hit)-norminv(falseAlarm); % calculate Dprime as Z(Hit) - Z(falseAlarm) - the distance between hits and false alarms
-    perf.hit(ind) = hit;
-    perf.fa(ind) = falseAlarm;
 end
 
 [dirName, fileName] = GP_file_opts_REPOSITORY(file_opts, 'performance');

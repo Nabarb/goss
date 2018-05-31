@@ -14,4 +14,10 @@ switch(opt)
     case 'pilot'
         %=========
         BH_opts.distrBin = 0.05; % bin size (in seconds) for histogram
+        
+        %=========
+    otherwise
+        %=========
+        BH_opts.distrBin = 0.05; % bin size (in seconds) for histogram
+
 end

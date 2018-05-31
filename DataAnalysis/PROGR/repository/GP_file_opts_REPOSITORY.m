@@ -1,5 +1,5 @@
 function [dirName, fileName] = GP_file_opts_REPOSITORY(file_opts, type)
-% function DS_file_opts_REPOSITORY returns directory and creates filename according to type
+%% returns directory and creates filename according to type
 %
 % opts: contains information about the data
 % type: specifies the kind of data
@@ -10,7 +10,7 @@ function [dirName, fileName] = GP_file_opts_REPOSITORY(file_opts, type)
 % Marianna Semprini
 % IIT, April 2018
 
-dirs = GP_dir_opts_REPOSITORY(file_opts.set.local);
+dirs = GP_dir_opts_REPOSITORY(file_opts.set.local,file_opts.protocol);
 
 switch type
     
@@ -31,6 +31,9 @@ switch type
         
         dirName  = dirs.dir_performance;
         fileName = [set '_' file_opts.dataset];
+end
+if ~exist(dirName,'dir')
+    mkdir(dirName);
 end
 
 

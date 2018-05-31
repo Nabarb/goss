@@ -6,14 +6,14 @@ function marker = GP_find_triggers(fileName, freq, seqOrder)
 % seqOrder: 2 elements vector specyfing the order of presentation of n-back tasks (n = 2 or 3)
 %
 % marker: structure containing the timestamps of different trigger types for both n-back tasks
-%   L_hit: letter presentation followed by hit 
-%   L_miss: letter presentation followed by miss 
-%   L_false: letter presentation followed by false alarm 
-%   P_hit: button press followed by hit 
-%   P_false: button press followed by false alarm 
+%   L_hit: letter presentation followed by hit
+%   L_miss: letter presentation followed by miss
+%   L_false: letter presentation followed by false alarm
+%   P_hit: button press followed by hit
+%   P_false: button press followed by false alarm
 %   stimNumber: number of stimulus presentations per each n-back task
 %   seqLength: number of letter presentations per each n-back task
-%   
+%
 % FIELDTRIP needed to run this function
 %
 % Events list as logged in EEG data:
@@ -34,11 +34,15 @@ cfg.dataset = fileName;
 
 % check the number of correct presses
 % E_ts = [event(find(strcmp('Experiment', {event.type}))).sample];
-S_ts = [event(find(strcmp('S  3', {event.value}))).sample];         % Stimulus!
-P_ts = [event(find(strcmp('Press', {event.type}))).sample];         % button press
-L_ts = [event(find(strcmp('Stimulus', {event.type}))).sample];      % letter presentation
+S_ts = [event((strcmp('S  3', {event.value}))).sample];         % Stimulus!
+P_ts = [event((strcmp('Press', {event.type}))).sample];         % button press
+L_ts = [event((strcmp('Stimulus', {event.type}))).sample];      % letter presentation
 
-
+% Obtain seqOrder from the triggers
+if isempty(seqOrder)
+    ExpTriggers=cat(1,event((strcmp('Experiment', {event.type}))).value);
+    seqOrder=str2double(ExpTriggers(:,4))';
+end
 marker.seqType = seqOrder; % two or three back
 
 marker.L_hit{1} = [];
@@ -70,14 +74,12 @@ for ii = 1:length(S_ts)
         pos = 2;
     end
     
+    % if a press is detected in the next two seconds, log a hit
     a = S_ts(ii); b = S_ts(ii)+2*freq; % CONTROLLARE FREQUENZA DI ACQUISIZIONE
-    p = find((P_ts>=a)&(P_ts<=b));
-    press_list = [press_list p]; % list of hit press 
+    p = find((P_ts>=a)&(P_ts<=b),1);
+    press_list = [press_list p]; % list of hit press
     
-    if length(p)>1
-        p = p(1);
-    end
-    if P_ts(p)
+    if ~isempty(p)
         % hit
         tmp = marker.L_hit{pos};
         marker.L_hit(pos) = {[tmp; S_ts(ii)]};
@@ -95,7 +97,7 @@ end
 false_list = 1:numel(P_ts);
 false_list(press_list) = [];
 for ii = false_list
-     if ii <= length(S_ts)/2
+    if ii <= length(S_ts)/2
         pos = 1;
     else
         pos = 2;

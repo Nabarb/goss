@@ -17,9 +17,19 @@ switch(opt)
         EEG_opts.nCh = 128;     % number of recorded channels
         EEG_opts.disCh = {}; % disabled channels
     
+        
+        %=========
+    case 'noStim'
+        %=========
+        EEG_opts.freq = 1000;   % frequency of acquisition [Hz]
+        EEG_opts.nCh = 128;     % number of recorded channels
+        EEG_opts.disCh = {}; % disabled channels
+             
         %=========
     otherwise
         %=========
         
-        
+        EEG_opts.freq = 1000;   % frequency of acquisition [Hz]
+        EEG_opts.nCh = 128;     % number of recorded channels
+        EEG_opts.disCh = {}; % disabled channels
 end

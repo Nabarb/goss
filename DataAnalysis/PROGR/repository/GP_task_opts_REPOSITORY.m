@@ -16,4 +16,9 @@ switch(opt)
         task_opts.ITI = 2; % inter trial interval in seconds
         task_opts.Lduration = 0.5; % stimulus duration in seconds
         
+    case 'noStim'
+        %=========
+        task_opts.ITI = 2.5; % inter trial interval in seconds
+        task_opts.Lduration = 0.5; % stimulus duration in seconds
+        
  end

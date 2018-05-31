@@ -17,9 +17,9 @@ for ff = 1:length(opts.set)
     
     performance.dPrime(ff,:) = perf.dPrime;
     performance.hit(ff,:) = perf.hit;
-    performance.miss(ff,:) = perf.fa;
+    performance.fa(ff,:) = perf.fa;
 end
 
-dirs = GP_dir_opts_REPOSITORY;
+dirs = GP_dir_opts_REPOSITORY(file_opts.protocol);
 fileName = [opts_BH_analysis, '_', opts.dataset];
 save(fullfile(dirs.dir_performance, fileName),'performance');
