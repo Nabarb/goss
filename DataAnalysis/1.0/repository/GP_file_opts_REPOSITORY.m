@@ -24,22 +24,14 @@ switch type
         set = file_opts.set.name;
         
         dirName  = dirs.dir_rawEEGData;
-        fileName = [set '_TRIGGER'];
+        fileName = [set '_' file_opts.dataset '_TRIGGER'];
         
     case 'performance'                  % task performance
         set = file_opts.set.name;
         
         dirName  = dirs.dir_performance;
-        fileName = [set '_PERFORMANCE'];
-        
-    case 'behavior'
-        set = file_opts.set.name;
-        
-        dirName  = dirs.dir_rawEEGData;
-        fileName = [set '_' 'BH'];
-        
+        fileName = [set '_' file_opts.dataset];
 end
-
 if ~exist(dirName,'dir')
     mkdir(dirName);
 end

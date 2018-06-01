@@ -4,7 +4,7 @@
 % IIT, April 2018
 
 GP_set_FileList_script; % load opts structure
-opts=opts(1);
+
 ITI = opts.task.ITI;
 bin = opts.BH_analysis.distrBin;
 edges = 0:bin:ITI;
@@ -44,11 +44,11 @@ legend(ax_2b,'hit','false alarm');
 axis(ax_2b,[0 ITI 0 maxY]);
 xlabel(ax_2b,'Time [s]');
 ylabel(ax_2b,'Normalized Press Distribution');
-set(ax_2b, 'FontSize', 14, 'FontWeight','bold');
+set(ax_2b, 'fontsize', 14, 'fontweigh','bold');
 grid(ax_2b,'on');
 
 
-ax_3b=subplot(1,2,2);
+ax_3b=subplot(1,2,2)
 % bar(ax_3b,edges, nanmean(hit_3b,2));
 % bar(ax_3b,edges, nansum(hit_3b,2)./nansum(hit_3b(:)));
 rectangle(ax_3b,'position',[0 0 0.5 maxY],'facecolor',[0.9 0.9 0.9],'edgecolor','none');

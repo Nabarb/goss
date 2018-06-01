@@ -11,12 +11,8 @@ function perf = GP_performance_compute(file_opts)
 [dirName, fileName] = GP_file_opts_REPOSITORY(file_opts, 'eeg');
 fsamp = file_opts.rec.freq;
 
-switch file_opts.protocol
-    case 'pilot'
-        marker = GP_find_triggers_old(fullfile(dirName,fileName), file_opts.rec.freq, file_opts.set.seqOrder);
-    otherwise
-        marker = GP_find_triggers(fullfile(dirName,fileName), file_opts.rec.freq, file_opts.set.seqOrder);
-end
+marker = GP_find_triggers(fullfile(dirName,fileName), fsamp, file_opts.set.seqOrder);
+
 if marker.seqType(1) == 2 % 2back task
     ind1 = 1;
     ind2 = 2;
@@ -27,7 +23,6 @@ end
 
 performance = nan(2,3); % [hit miss fa 2 back; ... 3 back]
 index = [ind1, ind2];
-taskType={'resp2back','resp3back'};
 for ii = 1:2
     ind = index(ii);
     performance(ind,1) = numel(marker.L_hit{ii}); % hit 2 back
@@ -39,6 +34,9 @@ for ii = 1:2
     nSeq = marker.seqLength(ii);
     hit = performance(ind,1)/nStim;
     falseAlarm = performance(ind,3)/(nSeq - nStim);
+    
+    perf.hit(ind) = hit;
+    perf.fa(ind) = falseAlarm;
     
     %%%%% adjust numbers if == 0 or == 1
     if hit == 1 % trick otherwise norminv = inf
@@ -53,12 +51,7 @@ for ii = 1:2
     end
     
     perf.dPrime(ind) = norminv(hit)-norminv(falseAlarm); % calculate Dprime as Z(Hit) - Z(falseAlarm) - the distance between hits and false alarms
-    perf.hit(ind) = hit;
-    perf.fa(ind) = falseAlarm;
-    perf.(taskType{ind})={marker.P_hit{ii}-marker.L_hit{ii} marker.L_hit{ii}};
 end
 
 [dirName, fileName] = GP_file_opts_REPOSITORY(file_opts, 'performance');
 save(fullfile(dirName, fileName), 'perf');
-
-%% pOPULATION ANALYSIS

@@ -1,6 +1,6 @@
-function marker = GP_find_triggers(fileName, freq, seqOrder)
-%% Extracts trigger timestamps
-% To analyze new data. Extracts triggers from the eeg data and computes
+function marker = GP_find_triggers_old(fileName, freq, seqOrder)
+%% Extracts trigger timestamps, legacy version. 
+% To analyze pilot data. Extracts triggers from the eeg data and computes
 % the number of hits, misses and false positives. Returns a structure with
 % this data (see below)
 % Also, some sanity checks on the numver of events detected are performed
@@ -20,18 +20,11 @@ function marker = GP_find_triggers(fileName, freq, seqOrder)
 %   P_false: button press followed by false alarm
 %   stimNumber: number of stimulus presentations per each n-back task
 %   seqLength: number of letter presentations per each n-back task
-% 
-% FIELDTRIP needed to run this function. The function ft_read_event returns 
-%   an event structure nwith the fields: type, value, time etc.  
-% In this version only the type field is used to differentiate between  
-% triggers. 
 %
-% Events list as logged in EEG data:
-%       E  1 : resting state
-%       E  2 : two back
-%       E  3 : three back
-%       S  2 : Letter
-%       S  3 : Stimulus
+% FIELDTRIP needed to run this function. The function ft_read_event returns
+%   an event structure nwith the fields: type, value, time etc. 
+% In this version only the type field is used to differentiate between 
+% triggers.
 %
 % Marianna Semprini
 % IIT, April 2018
@@ -44,17 +37,11 @@ cfg.dataset = fileName;
 
 % check the number of correct presses
 % E_ts = [event(find(strcmp('Experiment', {event.type}))).sample];
-S_ts = [event((strcmp('S  3', {event.value}))).sample];         % Stimulus!
+S_ts = [event((strcmp('Stimulus', {event.type}))).sample];         % Stimulus!
 P_ts = [event((strcmp('Press', {event.type}))).sample];         % button press
-L_ts = [event((strcmp('Stimulus', {event.type}))).sample];      % letter presentation
+L_ts = [event((strcmp('Letter', {event.type}))).sample];      % letter presentation
 
 % Obtain seqOrder from the triggers
-ExpTriggers=cat(1,event((strcmp('Experiment', {event.type}))).value);
-seqOrderTrigs=str2num(ExpTriggers(:,4))'; % str2double does not return an array for some reason but a single value
-
-if any(seqOrder~=seqOrderTrigs)     % checks if there is any difference with the one expected
-    warning('Sequence order detected from the triggers is diffferent from the one expected!!')
-end
 marker.seqType = seqOrder; % two or three back
 
 marker.L_hit{1} = [];

@@ -4,11 +4,12 @@
 % IIT, April 2018
 
 GP_set_FileList_script; % load opts structure
-
-for ff = 1:length(opts.set)
-    
-    file_opts = opts;
-    file_opts.set = file_opts.set(ff);
-    GP_create_triggerFile_compute(file_opts);
+for ii=1:numel(opts)
+    for ff = 1:numel(opts(ii).set)
+        
+        file_opts = opts(ii);
+        file_opts.set = file_opts.set(ff);
+        GP_create_triggerFile_compute(file_opts);
+    end
 end
 

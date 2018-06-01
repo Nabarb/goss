@@ -1,17 +1,10 @@
 function marker = GP_find_triggers(fileName, freq, seqOrder)
-%% Extracts trigger timestamps
-% To analyze new data. Extracts triggers from the eeg data and computes
-% the number of hits, misses and false positives. Returns a structure with
-% this data (see below)
-% Also, some sanity checks on the numver of events detected are performed
-% and warnings are displayed if something is wrong
+% function GP_find_triggers extracts trigger timestamps
 %
-% %%%%%%%%%   Input:
 % fileName: file name and path of the dataset
 % freq: frequency of EEG acquisition
 % seqOrder: 2 elements vector specyfing the order of presentation of n-back tasks (n = 2 or 3)
 %
-% %%%%%%%%%   Output:
 % marker: structure containing the timestamps of different trigger types for both n-back tasks
 %   L_hit: letter presentation followed by hit
 %   L_miss: letter presentation followed by miss
@@ -20,11 +13,8 @@ function marker = GP_find_triggers(fileName, freq, seqOrder)
 %   P_false: button press followed by false alarm
 %   stimNumber: number of stimulus presentations per each n-back task
 %   seqLength: number of letter presentations per each n-back task
-% 
-% FIELDTRIP needed to run this function. The function ft_read_event returns 
-%   an event structure nwith the fields: type, value, time etc.  
-% In this version only the type field is used to differentiate between  
-% triggers. 
+%
+% FIELDTRIP needed to run this function
 %
 % Events list as logged in EEG data:
 %       E  1 : resting state
@@ -49,11 +39,9 @@ P_ts = [event((strcmp('Press', {event.type}))).sample];         % button press
 L_ts = [event((strcmp('Stimulus', {event.type}))).sample];      % letter presentation
 
 % Obtain seqOrder from the triggers
-ExpTriggers=cat(1,event((strcmp('Experiment', {event.type}))).value);
-seqOrderTrigs=str2num(ExpTriggers(:,4))'; % str2double does not return an array for some reason but a single value
-
-if any(seqOrder~=seqOrderTrigs)     % checks if there is any difference with the one expected
-    warning('Sequence order detected from the triggers is diffferent from the one expected!!')
+if isempty(seqOrder)
+    ExpTriggers=cat(1,event((strcmp('Experiment', {event.type}))).value);
+    seqOrder=str2double(ExpTriggers(:,4))';
 end
 marker.seqType = seqOrder; % two or three back
 

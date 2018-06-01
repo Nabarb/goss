@@ -12,9 +12,10 @@ function [hit_2b, fa_2b, hit_3b, fa_3b] = GP_compute_press_distribution(file_opt
 % Marianna Semprini
 % IIT, April 2018
 
+[dirName, fileName] = GP_file_opts_REPOSITORY(file_opts, 'eeg');
 fsamp = file_opts.rec.freq;
 
-marker = GP_create_triggerFile_compute(file_opts);
+marker = GP_find_triggers(fullfile(dirName,fileName), fsamp, file_opts.set.seqOrder);
 
 if marker.seqType(1) == 2 % 2back task
     ind1 = 1;
