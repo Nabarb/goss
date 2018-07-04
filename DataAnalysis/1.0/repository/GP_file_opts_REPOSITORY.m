@@ -24,7 +24,7 @@ switch type
         set = file_opts.set.name;
         
         dirName  = dirs.dir_rawEEGData;
-        fileName = [set '_' file_opts.dataset '_TRIGGER'];
+        fileName = [set '_TRIGGER'];
         
     case 'performance'                  % task performance
         set = file_opts.set.name;

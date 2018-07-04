@@ -18,8 +18,8 @@ end
 User=getenv('username');
 switch(User)
     case 'MSemprini'
-        dirs.root_raw = 'C:\Users\MSemprini\Documents\_WORK\projects\GOSSWEILER\DATA\PILOT\RAWDATA';    % root data for raw acquisitions                                                             % root raw data
-        dirs.root_data = 'C:\Users\MSemprini\Documents\_WORK\projects\GOSSWEILER\DATA\PILOT\analysis';  % root data for analysis
+        dirs.root_raw = 'C:\Users\MSemprini\OneDrive - Fondazione Istituto Italiano Tecnologia\Gossweiler\DATA\_RAW';    % root data for raw acquisitions                                                             % root raw data
+        dirs.root_analysis = 'C:\Users\MSemprini\OneDrive - Fondazione Istituto Italiano Tecnologia\Gossweiler\DATA';  % root data for analysis
         % dirs.root_plot = 'Y:\SW_&_DATA\BIMFERR_MARI\DATA\figures';                                    % root data for images
         
     case 'Fede'
@@ -38,7 +38,7 @@ switch(protocolType)
         
     case 'noStim'
         dir_opts.dir_rawEEGData = fullfile(dirs.root_raw, 'noStimH', localPath);                       % contains raw EEG Data
-        dir_opts.dir_performance = fullfile(dirs.root_analysis,'noStimH', localPath);
+        dir_opts.dir_performance = fullfile(dirs.root_analysis,'noStimH');
 end
 
 % dir_opts.dir_EEGData = fullfile(dirs.root_data, 'EMG');                             % contains processed EEG data

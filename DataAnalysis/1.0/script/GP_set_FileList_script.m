@@ -5,7 +5,7 @@
 
 %% Define the analysis protocol
 % -------------------------
-opts.dataset = 'PRE';   % specifies which kind of data is analyzed
+opts.dataset = 'Pre';   % specifies which kind of data is analyzed
 opts_rec = 'noStim';     % specifies the parameters for EEG recording
 opts_task = 'noStim';
 opts_BH_analysis = 'noStim';
@@ -27,19 +27,21 @@ opts_EEG_analysis = 'CT';
 %     };
 
 data = {    % noStim Subjects
-    % filename,                     % local path,                   % n-back order;
-    'GOSS_GB_CT',              '20180529_GB_NOSTIM',           [3 2];
-    'GOSS_FB_CT',              '20180531_FB_NOSTIM',           [3 2];
+    % filename,                                                    % local path,                   % n-back order;
+    ['GOSS1001_' opts_EEG_analysis '_' opts.dataset],              '20180529_GB_noStim',          % [3 2]; 
+    ['GOSS1002_' opts_EEG_analysis '_' opts.dataset],              '20180530_AR_noStim',          % [3 2];
+    ['GOSS1003_' opts_EEG_analysis '_' opts.dataset],              '20180531_FB_noStim',          % [3 2];    
+    ['GOSS1006_' opts_EEG_analysis '_' opts.dataset],              '20180626_DG_noStim',          % [3 2];
+                               
     };
 
 
 for ii = 1:size(data,1)
     opts.set(ii).name = data{ii,1};
     opts.set(ii).local = data{ii,2};
-    opts.set(ii).seqOrder = data{ii,3};
 end
 
-opts.protocol=opts_rec;
+opts.protocol = opts_rec;
 opts.rec = GP_eeg_opts_REPOSITORY(opts_rec);
 opts.task = GP_task_opts_REPOSITORY(opts_task);
 opts.BH_analysis = GP_BH_opts_REPOSITORY(opts_BH_analysis);

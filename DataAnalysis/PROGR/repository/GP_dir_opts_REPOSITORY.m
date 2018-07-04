@@ -14,6 +14,7 @@ if nargin <2
     localPath = '';
 end
 
+
 %% here each user can define a different path for where he stores his files
 User=getenv('username');
 switch(User)

@@ -1,4 +1,4 @@
-function marker = GP_find_triggers(fileName, freq, seqOrder)
+function marker = GP_find_triggers(fileName, freq, ITI)
 % function GP_find_triggers extracts trigger timestamps
 %
 % fileName: file name and path of the dataset
@@ -23,7 +23,7 @@ function marker = GP_find_triggers(fileName, freq, seqOrder)
 %       S  2 : Letter
 %       S  3 : Stimulus
 %
-% Marianna Semprini
+% Marianna Semprini and Federico Barban
 % IIT, April 2018
 
 
@@ -34,15 +34,14 @@ cfg.dataset = fileName;
 
 % check the number of correct presses
 % E_ts = [event(find(strcmp('Experiment', {event.type}))).sample];
-S_ts = [event((strcmp('S  3', {event.value}))).sample];         % Stimulus!
+S_ts = [event((strcmp('S  3', {event.value}))).sample];         % stimulus letter!
 P_ts = [event((strcmp('Press', {event.type}))).sample];         % button press
 L_ts = [event((strcmp('Stimulus', {event.type}))).sample];      % letter presentation
 
 % Obtain seqOrder from the triggers
-if isempty(seqOrder)
-    ExpTriggers=cat(1,event((strcmp('Experiment', {event.type}))).value);
-    seqOrder=str2double(ExpTriggers(:,4))';
-end
+ExpTriggers=cat(1,event((strcmp('Experiment', {event.type}))).value);
+seqOrder=[str2double(ExpTriggers(1,4)) str2double(ExpTriggers(2,4))];
+
 marker.seqType = seqOrder; % two or three back
 
 marker.L_hit{1} = [];
@@ -74,8 +73,8 @@ for ii = 1:length(S_ts)
         pos = 2;
     end
     
-    % if a press is detected in the next two seconds, log a hit
-    a = S_ts(ii); b = S_ts(ii)+2*freq; % CONTROLLARE FREQUENZA DI ACQUISIZIONE
+    % if a press is detected in the next ITI seconds, log a hit
+    a = S_ts(ii); b = S_ts(ii)+ITI*freq;
     p = find((P_ts>=a)&(P_ts<=b),1);
     press_list = [press_list p]; % list of hit press
     

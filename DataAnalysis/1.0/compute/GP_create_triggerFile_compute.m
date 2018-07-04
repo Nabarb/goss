@@ -9,7 +9,7 @@ function GP_create_triggerFile_compute(file_opts)
 
 [dirName, fileName] = GP_file_opts_REPOSITORY(file_opts, 'eeg');
 
-marker = GP_find_triggers(fullfile(dirName,fileName), file_opts.rec.freq, file_opts.set.seqOrder);
+marker = GP_find_triggers(fullfile(dirName,fileName), file_opts.rec.freq, file_opts.task.ITI);
 marker = GP_clean_triggers(marker,file_opts);
 
 external_events = GP_create_triggers(marker, file_opts.rec.freq);
