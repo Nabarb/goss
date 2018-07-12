@@ -14,8 +14,9 @@ function [hit_2b, fa_2b, hit_3b, fa_3b] = GP_compute_press_distribution(file_opt
 
 [dirName, fileName] = GP_file_opts_REPOSITORY(file_opts, 'eeg');
 fsamp = file_opts.rec.freq;
+ITI = file_opts.task.ITI;
 
-marker = GP_find_triggers(fullfile(dirName,fileName), fsamp, file_opts.set.seqOrder);
+marker = GP_find_triggers(fullfile(dirName,fileName), fsamp, ITI);
 
 if marker.seqType(1) == 2 % 2back task
     ind1 = 1;

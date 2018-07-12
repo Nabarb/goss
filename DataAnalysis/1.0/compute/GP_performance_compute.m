@@ -9,9 +9,10 @@ function perf = GP_performance_compute(file_opts)
 % IIT, April 2018
 
 [dirName, fileName] = GP_file_opts_REPOSITORY(file_opts, 'eeg');
-fsamp = file_opts.rec.freq;
+fsamp = file_opts.rec.freq;  
+ITI = file_opts.task.ITI;
 
-marker = GP_find_triggers(fullfile(dirName,fileName), fsamp, file_opts.set.seqOrder);
+marker = GP_find_triggers(fullfile(dirName,fileName), fsamp, ITI);
 
 if marker.seqType(1) == 2 % 2back task
     ind1 = 1;

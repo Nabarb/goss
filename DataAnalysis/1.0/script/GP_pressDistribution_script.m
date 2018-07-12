@@ -15,16 +15,24 @@ fa_2b = nan(numel(edges), length(opts.set));
 fa_3b = nan(numel(edges), length(opts.set));
 
 
-  for ll = 1:length(opts.set)
+for ll = 1:length(opts.set)
     
     file_opts = opts;
-    file_opts.set = file_opts.set(ll);  
-    [hit_2b, fa_2b, hit_3b, fa_3b] = GP_compute_press_distribution(file_opts);
+    file_opts.set = file_opts.set(ll);
+    [h_2b, f_2b, h_3b, f_3b] = GP_compute_press_distribution(file_opts);
     
-    hit_2b(:,ll) = hit_2b;
-    fa_2b(:,ll) = fa_2b;
-    hit_3b(:,ll) = hit_3b;
-    fa_3b(:,ll) = fa_3b;
+    if ~isempty(h_2b)
+        hit_2b(:,ll) = h_2b;
+    end
+    if ~isempty(f_2b)
+        fa_2b(:,ll) = f_2b;
+    end
+    if ~isempty(h_3b)
+        hit_3b(:,ll) = h_3b;
+    end
+    if ~isempty(f_3b)
+        fa_3b(:,ll) = f_3b;
+    end
     
 end
 
