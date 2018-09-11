@@ -13,7 +13,7 @@ opts_EEG_analysis = 'CT';
 
 % -------------------------
 
-%% Define data filenames 
+%% Define data filenames
 % data = {    % Pilot subjects
 %     % filename,                     % local path,                   % n-back order;
 %     'GOSS0001_CT_Pre',              '180228_LV_dataset1',           [3 2];
@@ -28,11 +28,17 @@ opts_EEG_analysis = 'CT';
 
 data = {    % noStim Subjects
     % filename,                                                    % local path,                   % n-back order;
-    ['GOSS1001_' opts_EEG_analysis '_' opts.dataset],              '20180529_GB_noStim',          % [3 2]; 
-    ['GOSS1002_' opts_EEG_analysis '_' opts.dataset],              '20180530_AR_noStim',          % [3 2];
-    ['GOSS1003_' opts_EEG_analysis '_' opts.dataset],              '20180531_FB_noStim',          % [3 2];    
-    ['GOSS1006_' opts_EEG_analysis '_' opts.dataset],              '20180626_DG_noStim',          % [3 2];
-                               
+%         ['GOSS1001_' opts_EEG_analysis '_' opts.dataset],              '20180529_GB_noStim',          % [3 2];
+%         ['GOSS1002_' opts_EEG_analysis '_' opts.dataset],              '20180530_AR_noStim',          % [3 2];
+%         ['GOSS1003_' opts_EEG_analysis '_' opts.dataset],              '20180531_FB_noStim',          % [3 2];
+%         ['GOSS1004_' opts_EEG_analysis '_' opts.dataset],              '20180613_NL_noStim',
+%         ['GOSS1005_' opts_EEG_analysis '_' opts.dataset],              '20180619_LP_noStim',
+%         ['GOSS1006_' opts_EEG_analysis '_' opts.dataset],              '20180626_DG_noStim',          % [3 2];
+%         ['GOSS1008_' opts_EEG_analysis '_' opts.dataset],              '20180628_MB_noStim',
+%         ['GOSS1009_' opts_EEG_analysis '_' opts.dataset],              '20180706_EL_noStim',
+%         ['GOSS1010_' opts_EEG_analysis '_' opts.dataset],              '20180713_CO_noStim',
+    ['GOSS1011_' opts_EEG_analysis '_' opts.dataset],              '20180904_EC_noStim',
+    
     };
 
 
