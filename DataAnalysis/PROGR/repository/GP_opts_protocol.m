@@ -38,7 +38,7 @@ switch(protocol)
         file_opts.BH_analysis.distrBin = 0.05; 
     
     %=========
-    case 'noStim'
+    case 'noStimH'
     %=========
         file_opts.task.ITI = 2.5;
         file_opts.task.Lduration = 0.5;

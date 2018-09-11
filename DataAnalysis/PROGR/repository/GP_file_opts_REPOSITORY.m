@@ -24,20 +24,32 @@ switch type
         set = file_opts.set.name;
         
         dirName  = dirs.dir_rawEEGData;
-        fileName = [set '_TRIGGER'];
+        fileName = [set '_TRIGGER.mat'];
         
     case 'performance'                  % task performance
         set = file_opts.set.name;
         
         dirName  = dirs.dir_performance;
-        fileName = [set '_PERFORMANCE'];
+        fileName = [set '_PERFORMANCE.mat'];
         
     case 'behavior'
         set = file_opts.set.name;
         
         dirName  = dirs.dir_rawEEGData;
-        fileName = [set '_' 'BH'];
+        fileName = [set '_' 'BH.mat'];
         
+    case 'elec'
+        set = file_opts.set.name;        
+        tmp = strsplit(set,'_');
+        dirName  = dirs.dir_rawEEGData;
+        fileName = [tmp{1} '.sfp'];
+        
+                
+    case 'mr'
+        set = file_opts.set.name;        
+        tmp = strsplit(set,'_');
+        dirName  = dirs.dir_rawEEGData;
+        fileName = [tmp{1} '.nii'];
 end
 
 if ~exist(dirName,'dir')
