@@ -1,4 +1,4 @@
-function events = GP_create_triggers(marker, freq)
+function [events eventInfo] = GP_create_triggers(marker, freq)
 % function GP_create_trigger organize triggers in a structure compatible with NET analysis
 %
 % marker: structure containing the timestamps of different trigger types for both n-back tasks
@@ -12,6 +12,7 @@ function events = GP_create_triggers(marker, freq)
 % freq: frequency of EEG acquisition
 %
 % events: trigger structure compatible with NET analysis (type - value - duration - time - offset
+% eventInfo: structure containing number of trials per condition
 
 %
 % Marianna Semprini
@@ -31,6 +32,8 @@ for ii = 1:2
         events(counter).offset = 0;
         counter = counter +1;
     end
+    eventInfo.L_hit(marker.seqType(ii)-1) = nHit;
+    
     nHit =  numel(marker.P_hit{ii});
     for jj = 1:nHit
         events(counter).type = ['Hit press ' seq 'back'];
@@ -40,6 +43,7 @@ for ii = 1:2
         events(counter).offset = 0;
         counter = counter +1;
     end
+    eventInfo.P_hit(marker.seqType(ii)-1) = nHit;
     
     % miss
     nMiss =  numel(marker.L_miss{ii});
@@ -51,6 +55,7 @@ for ii = 1:2
         events(counter).offset = 0;
         counter = counter +1;
     end
+    eventInfo.L_miss(marker.seqType(ii)-1) = nMiss;
     
     % false alarms
     nFA =  numel(marker.L_false{ii});
@@ -62,6 +67,8 @@ for ii = 1:2
         events(counter).offset = 0;
         counter = counter +1;
     end
+    eventInfo.L_fa(marker.seqType(ii)-1) = nFA;
+    
     nFA =  numel(marker.P_false{ii});
     for jj = 1:nFA
         events(counter).type = ['False alarm press ' seq 'back'];
@@ -71,5 +78,6 @@ for ii = 1:2
         events(counter).offset = 0;
         counter = counter +1;
     end
+    eventInfo.P_fa(marker.seqType(ii)-1) = nFA;
     
 end
