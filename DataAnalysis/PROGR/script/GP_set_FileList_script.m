@@ -7,9 +7,10 @@
 % -------------------------
 datatype = {'PRE'};   % specifies which kind of data is analyzed
 % protocol = {'pilot','noStimH'};
- protocol = {'noStimH'};
+protocol = {'noStimH'};
 protocolCode = [   1];
-opts.dataset = 'Pre';   % specifies which kind of data is analyzed
+subjectsToSkip = 7;
+
 opts_rec = 'noStim';     % specifies the parameters for EEG recording
 opts_task = 'noStim';
 opts_BH_analysis = 'noStim';
@@ -75,19 +76,35 @@ end
 %% Parses data information into opts structure
 for jj = 1:numel(data)
     set=[];
+    c=0;
     for ii=1:size(data{jj},1)
-        set(ii).name = data{jj}{ii,1};
-        set(ii).BHname = data{jj}{ii,1};
-        set(ii).local = data{jj}{ii,2};
-        set(ii).seqOrder = data{jj}{ii,3};
+        if any(ii==subjectsToSkip)
+            c=c+1;
+            continue;
+        end
+        set(ii-c).name = data{jj}{ii,1};
+        set(ii-c).BHname = data{jj}{ii,1};
+        set(ii-c).local = data{jj}{ii,2};       
+        
     end
     opts_.set=set;
     opts_.protocol=protocol{jj};
     opts_.datatype=datatype{jj};
     opts_ = GP_opts_protocol(protocol{jj},opts_);
 
+    for ii=1:numel(opts_.set)
+        opts__=opts_;
+        opts__.set=opts__.set(ii);
+        [dirName, fileName]=GP_file_opts_REPOSITORY(opts__,'behavior');
+        BH=load(fullfile(dirName, fileName), 'data');
+        
+        opts_.set(ii).seqOrder = [BH.data.seq1.back BH.data.seq2.back];
+    end
+    
     opts(jj)=opts_;
 end
+
+
 
 % opts.protocol = opts_rec;
 % opts.rec = GP_eeg_opts_REPOSITORY(opts_rec);

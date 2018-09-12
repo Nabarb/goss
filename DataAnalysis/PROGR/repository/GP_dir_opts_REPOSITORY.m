@@ -25,10 +25,16 @@ switch(User)
         % dirs.root_plot = 'Y:\SW_&_DATA\BIMFERR_MARI\DATA\figures';                                    % root data for images
         
     case 'Fede'
+        % root folder for raw acquisitions
+        dirs.root_raw  = 'X:\DATA\_RAW';
+        % root folder for data analysis
+        dirs.root_analysis = 'D:\Barban Federico\TMP data\Goss';
+        % dirs.root_plot = 'Y:\SW_&_DATA\BIMFERR_MARI\DATA\figures';
+    case 'Valentina'
                 % root folder for raw acquisitions
         dirs.root_raw  = 'X:\DATA\_RAW';   
                 % root folder for data analysis
-        dirs.root_analysis = 'C:\Users\Fede\Documents\Eperiments\Goss';    
+        dirs.root_analysis = 'D:\Barban Federico\TMP data\Goss';    
         % dirs.root_plot = 'Y:\SW_&_DATA\BIMFERR_MARI\DATA\figures';                                   
         
 end

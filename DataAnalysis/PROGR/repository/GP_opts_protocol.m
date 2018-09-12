@@ -44,7 +44,7 @@ switch(protocol)
         file_opts.task.Lduration = 0.5;
         
         file_opts.rec.freq = 1000;   
-        file_opts.rec.nCh = 135;     
+        file_opts.rec.nCh = 129;     
         file_opts.rec.disCh = {};
         
         file_opts.BH_analysis.distrBin = 0.05;
@@ -56,7 +56,7 @@ switch(protocol)
         file_opts.Lduration = 0.5; 
         
         file_opts.rec.freq = 1000;   % frequency of acquisition [Hz]
-        file_opts.rec.nCh = 135;     % number of recorded channels
+        file_opts.rec.nCh = 129;     % number of recorded channels
         file_opts.rec.disCh = {}; % disabled channels
        
         file_opts.BH.distrBin = 0.05; 
