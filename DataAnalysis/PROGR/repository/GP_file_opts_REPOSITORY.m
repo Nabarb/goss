@@ -36,7 +36,7 @@ switch type
         set = file_opts.set.name;
         
         dirName  = dirs.dir_rawEEGData;
-        fileName = [set '_' 'BH.mat'];
+        fileName = [set '.mat'];
         
     case 'elec'
         set = file_opts.set.name;        

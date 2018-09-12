@@ -5,9 +5,10 @@
 
 %% Define the analysis protocol
 % -------------------------
-datatype = {'PRE','PRE'};   % specifies which kind of data is analyzed
-protocol = {'pilot','noStimH'};
-protocolCode = [0   1];
+datatype = {'PRE'};   % specifies which kind of data is analyzed
+% protocol = {'pilot','noStimH'};
+ protocol = {'noStimH'};
+protocolCode = [   1];
 opts.dataset = 'Pre';   % specifies which kind of data is analyzed
 opts_rec = 'noStim';     % specifies the parameters for EEG recording
 opts_task = 'noStim';
@@ -17,24 +18,24 @@ opts_EEG_analysis = 'CT';
 % -------------------------
 
 %% Define data filenames 
-data = {% filename,                 % local path,            % n-back order;
-    
-    {% Pilot subjects Pre
-    'GOSS0001_CT_Pre',              '180228_LV_dataset1',           [3 2];
-%     'GOSS0001_CT_Post',             '180228_LV_dataset1',           [3 2];
-    'GOSS0002_CT_Pre',              '180305_CV_dataset2',           [3 2];
-%     'GOSS0002_CT_Post',             '180305_CV_dataset2',           [3 2];
-    'GOSS0003_CT_Pre',              '180309_LT_dataset3',           [3 2];
-%     'GOSS0003_CT_Post',             '180309_LT_dataset3',           [3 2];
-    'GOSS0005_CT_Pre',               '180320_CN_dataset5',           [3 2];
-%     'GOSS0005_CTpost',              '180320_CN_dataset5',           [3 2];
-                                                                        }
-
-    {% noStim Subjects
-    'GOSS1001_CT_Pre',              '20180529_GB_NoStim',           [3 2];
-    'GOSS1002_CT_Pre',              '20180531_FB_NoStim',           [3 2];
-                                                                        }
-    };
+% data = {% filename,                 % local path,            % n-back order;
+%     
+%     {% Pilot subjects Pre
+%     'GOSS0001_CT_Pre',              '180228_LV_dataset1',           [3 2];
+% %     'GOSS0001_CT_Post',             '180228_LV_dataset1',           [3 2];
+%     'GOSS0002_CT_Pre',              '180305_CV_dataset2',           [3 2];
+% %     'GOSS0002_CT_Post',             '180305_CV_dataset2',           [3 2];
+%     'GOSS0003_CT_Pre',              '180309_LT_dataset3',           [3 2];
+% %     'GOSS0003_CT_Post',             '180309_LT_dataset3',           [3 2];
+%     'GOSS0005_CT_Pre',               '180320_CN_dataset5',           [3 2];
+% %     'GOSS0005_CTpost',              '180320_CN_dataset5',           [3 2];
+%                                                                         }
+% 
+%     {% noStim Subjects
+%     'GOSS1001_CT_Pre',              '20180529_GB_NoStim',           [3 2];
+%     'GOSS1002_CT_Pre',              '20180531_FB_NoStim',           [3 2];
+%                                                                         }
+%     };
 
 %% Populate the data filestructure with
 %
@@ -88,7 +89,7 @@ for jj = 1:numel(data)
     opts(jj)=opts_;
 end
 
-opts.protocol = opts_rec;
-opts.rec = GP_eeg_opts_REPOSITORY(opts_rec);
-opts.task = GP_task_opts_REPOSITORY(opts_task);
-opts.BH_analysis = GP_BH_opts_REPOSITORY(opts_BH_analysis);
+% opts.protocol = opts_rec;
+% opts.rec = GP_eeg_opts_REPOSITORY(opts_rec);
+% opts.task = GP_task_opts_REPOSITORY(opts_task);
+% opts.BH_analysis = GP_BH_opts_REPOSITORY(opts_BH_analysis);
