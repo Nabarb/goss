@@ -3,7 +3,7 @@ function marker = GP_find_triggers(fileName, freq, seqOrder)
 % To analyze new data. Extracts triggers from the eeg data and computes
 % the number of hits, misses and false positives. Returns a structure with
 % this data (see below)
-% Also, some sanity checks on the numver of events detected are performed
+% Also, some sanity checks on the number of events detected are performed
 % and warnings are displayed if something is wrong
 %
 % %%%%%%%%%   Input:
@@ -13,9 +13,9 @@ function marker = GP_find_triggers(fileName, freq, seqOrder)
 %
 % %%%%%%%%%   Output:
 % marker: structure containing the timestamps of different trigger types for both n-back tasks
-%   L_hit: letter presentation followed by hit
-%   L_miss: letter presentation followed by miss
-%   L_false: letter presentation followed by false alarm
+%   TP: letter presentation followed by hit
+%   FN: letter presentation followed by miss
+%   FP: letter presentation followed by false alarm
 %   P_hit: button press followed by hit
 %   P_false: button press followed by false alarm
 %   stimNumber: number of stimulus presentations per each n-back task
@@ -38,15 +38,27 @@ function marker = GP_find_triggers(fileName, freq, seqOrder)
 
 
 cfg.dataset = fileName;
-
-
+ITI = 2.5;  % seconds, DA PARAMETRIZZARE!!
+bl = -.5;   %baseline value
 [event] = ft_read_event(cfg.dataset);
 
 % check the number of correct presses
-% E_ts = [event(find(strcmp('Experiment', {event.type}))).sample];
+E_ts = [event(find(strcmp('Experiment', {event.type}))).sample];% Experimetn type
 S_ts = [event((strcmp('S  3', {event.value}))).sample];         % Stimulus!
 P_ts = [event((strcmp('Press', {event.type}))).sample];         % button press
 L_ts = [event((strcmp('Stimulus', {event.type}))).sample];      % letter presentation
+N_ts = [event((strcmp('S  2', {event.value}))).sample];         % Non stimulus
+
+%% clean triggers
+% removes those triggers where a press occurred either 500ms before letter
+% presentation or during the trial
+
+M = L_ts-P_ts';
+ind = and(M>bl*freq,M<ITI*freq);
+[~,cols]=find(ind);             % finds letters to remove
+marker.exclude{1}=L_ts(cols(cols<=130));
+marker.exclude{2}=L_ts(cols(cols>130));
+
 
 % Obtain seqOrder from the triggers
 ExpTriggers=cat(1,event((strcmp('Experiment', {event.type}))).value);
@@ -57,20 +69,17 @@ if any(seqOrder~=seqOrderTrigs)     % checks if there is any difference with the
 end
 marker.seqType = seqOrder; % two or three back
 
-marker.L_hit{1} = [];
-marker.L_hit{2} = [];
+marker.TP{1} = [];
+marker.TP{2} = [];
 
-marker.L_miss{1} = [];
-marker.L_miss{2} = [];
+marker.FN{1} = [];
+marker.FN{2} = [];
 
-marker.L_false{1} = [];
-marker.L_false{2} = [];
+marker.FP{1} = [];
+marker.FP{2} = [];
 
-marker.P_hit{1} = [];
-marker.P_hit{2} = [];
-
-marker.P_false{1} = [];
-marker.P_false{2} = [];
+marker.TN{1} = [];
+marker.TN{2} = [];
 
 press_list = [];
 
@@ -80,49 +89,83 @@ for ii = 1:length(S_ts)
     if length(S_ts) ~= 64
         disp(['Attention: number of stimuli = ' length(S_ts)]);
     end
-    if ii <= length(S_ts)/2
+    
+    if S_ts(ii) < E_ts(2)
         pos = 1;
     else
         pos = 2;
     end
     
+   
     % if a press is detected in the next two seconds, log a hit
-    a = S_ts(ii); b = S_ts(ii)+2*freq; % CONTROLLARE FREQUENZA DI ACQUISIZIONE
-    p = find((P_ts>=a)&(P_ts<=b),1);
-    press_list = [press_list p]; % list of hit press
+    a = S_ts(ii); b = S_ts(ii)+ITI*freq;    % CONTROLLARE FREQUENZA DI ACQUISIZIONE
+    p = find((P_ts>=a)&(P_ts<=b),1);        % for each stimulus, checks if a press occured after it
+    press_list = [press_list p];            % In which case it is added to the press list (ie indexes of the rightly done presses)
     
-    if ~isempty(p)
+    if ~isempty(p)                          % if a press occurred, the marker is added to the TP list
         % hit
-        tmp = marker.L_hit{pos};
-        marker.L_hit(pos) = {[tmp; S_ts(ii)]};
+        tmp = marker.TP{pos};
+        marker.TP(pos) = {[tmp; S_ts(ii)]};
         
-        tmp = marker.P_hit{pos};
-        marker.P_hit(pos) = {[tmp; P_ts(p)]};
-        
-    else
+    else                                    % else to the FN
         % miss
-        tmp = marker.L_miss{pos};
-        marker.L_miss(pos) = {[tmp; S_ts(ii)]};
+        tmp = marker.FN{pos};
+        marker.FN(pos) = {[tmp; S_ts(ii)]};
     end
 end
 
-false_list = 1:numel(P_ts);
+false_list = 1:numel(P_ts);                 % finds all the presses tha don't correspond to any stimulus
 false_list(press_list) = [];
 for ii = false_list
-    if ii <= length(S_ts)/2
+    if P_ts(ii) <  E_ts(2)
         pos = 1;
     else
         pos = 2;
     end
-    tmp = marker.P_false{pos};
-    marker.P_false(pos) = {[tmp; P_ts(ii)]};
     
-    idx = find(L_ts <= P_ts(ii));
-    tmp = marker.L_false{pos};
-    marker.L_false(pos) = {[tmp; L_ts(idx(end))]};
+    idx = find(L_ts <= P_ts(ii),1,'last');  % finds the letter associated with the erroneus press (the last letter presented before it)
+    tmp = marker.FP{pos};
+
+    marker.FP(pos) = {[tmp; L_ts(idx)]};
     
 end
+
+neg_list = 1:numel(N_ts);                   % index of S2, non target letters
+for ii = neg_list
+    if N_ts(ii) < E_ts(2)
+        pos = 1;
+    else
+        pos = 2;
+    end
+    
+
+    
+    a = N_ts(ii); b = N_ts(ii)+ITI*freq; % [a b] is the interval where a press could occur
+    p = find((P_ts>=a)&(P_ts<=b),1);     % checks if a press actually occurred in the said interval
+    if isempty(p)                        % if not, is a true negative
+        tmp = marker.TN{pos};
+        marker.TN(pos) = {[tmp; N_ts(ii)]};
+    end    
+end
+
+
+
+
 
 marker.stimNumber = [length(S_ts)/2 length(S_ts)/2];
 marker.seqLength = [length(L_ts)/2 length(L_ts)/2];
+
+%%%%%%%%%%%%
+%%% Sanity checks
+%%%%%%%%%%%%
+for ii=1:2
+check = numel(marker.FN{ii})+numel(marker.FP{ii})+numel(marker.TP{ii})+numel(marker.TN{ii})==(marker.seqLength(ii));
+if ~check
+   warning('Something is wrong!') 
+end
+end
+
+
+
+
 

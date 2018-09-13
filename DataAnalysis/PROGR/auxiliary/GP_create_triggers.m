@@ -2,11 +2,30 @@ function events = GP_create_triggers(marker, freq)
 % function GP_create_trigger organize triggers in a structure compatible with NET analysis
 %
 % marker: structure containing the timestamps of different trigger types for both n-back tasks
-%   L_hit: letter presentation followed by hit 
-%   L_miss: letter presentation followed by miss 
-%   L_false: letter presentation followed by false alarm 
-%   P_hit: button press followed by hit 
-%   P_false: button press followed by false alarm 
+%   LN_TP: letter presentation followed by true positive 
+%   LN_TN: letter presentation followed by true negative 
+%   LN_FN: letter presentation followed by false negative 
+%   LN_FP: letter presentation followed by false positive
+% 
+%  Encoding triggers, once a letter is presented to the subject it is encoded in its working
+%  memory. We monitor this event with the following set of triggers:
+%
+%   LN_WEN: letter presentation followed by a well encoded negative
+%   LN_BEN: letter presentation followed by a badly encoded negative
+%   LN_WEP: letter presentation followed by a well encoded positive
+%   LN_BEP: letter presentation followed by a badly encoded positive
+%
+%   An event is logged when a TP is preceded by an uniterrrupted buffer (ie without presses):
+%
+%   LN_BUFFN: buffer without a press in it
+%
+%   Where N is 2 or 3 depending on two back or three back
+%
+%   Encoding markers are not logged if they are listed in the exclude field
+%   ok marjer input structure. In this field should be present all the
+%   trials where a press occurs or where a press is too close to the letter
+%   presentation.
+%
 %   stimNumber: number of stimulus presentations per each n-back task
 %   seqLength: number of letter presentations per each n-back task  
 % freq: frequency of EEG acquisition
@@ -17,59 +36,71 @@ function events = GP_create_triggers(marker, freq)
 % Marianna Semprini
 % IIT, April 2018
 
+ISI = 2.5;
+markers ={
+            {'TP'   ,'TN'   ,'FP'   ,'FN'};
+            {'TP'   ,'TN'   ,'FP'   ,'FN'}
+            {'TP'}
+            };
+        
+TriggerNames =   {         
+            {'TP'   ,'TN'   ,'FP'   ,'FN'};
+            {'WEP'  ,'WEN'  ,'BEP'  ,'BEN'};
+            {'BUFF'}
+            };
+
 counter = 1;
 for ii = 1:2
-    seq = num2str(marker.seqType(ii));
-    
-    % hit
-    nHit =  numel(marker.L_hit{ii});
-    for jj = 1:nHit
-        events(counter).type = ['Letter before hit ' seq 'back'];
-        events(counter).value = {['L' seq '_h']};
-        events(counter).duration = 1;
-        events(counter).time = marker.L_hit{ii}(jj)/freq;
-        events(counter).offset = 0;
-        counter = counter +1;
-    end
-    nHit =  numel(marker.P_hit{ii});
-    for jj = 1:nHit
-        events(counter).type = ['Hit press ' seq 'back'];
-        events(counter).value = {['P' seq '_h']};
-        events(counter).duration = 1;
-        events(counter).time = marker.P_hit{ii}(jj)/freq;
-        events(counter).offset = 0;
-        counter = counter +1;
+    seq = marker.seqType(ii);
+    time = [];
+
+    for kk=1:numel(markers{1})
+        nM =  numel(marker.(markers{1}{kk}){ii});
+        for jj = 1:nM
+            events(counter).type = sprintf('letter presentation before a %s, %d back',markers{1}{kk},seq);
+            events(counter).value = {sprintf('L%d_%s',seq,TriggerNames{1}{kk})};
+            events(counter).duration = 1;
+            events(counter).time = marker.(markers{1}{kk}){ii}(jj)/freq;
+            events(counter).offset = 0;
+            counter = counter +1;
+        end
+        time=[time; marker.(markers{1}{kk}){ii}/freq];
     end
     
-    % miss
-    nMiss =  numel(marker.L_miss{ii});
-    for jj = 1:nMiss
-        events(counter).type = ['Letter before miss ' seq 'back'];
-        events(counter).value = {['L' seq '_m']};
-        events(counter).duration = 1;
-        events(counter).time = marker.L_miss{ii}(jj)/freq;
-        events(counter).offset = 0;
-        counter = counter +1;
+    time=sort(time);
+    for kk=1:numel(markers{2})
+        nM =  numel(marker.(markers{2}{kk}){ii});
+        for jj = 1:nM
+            if (all((time-marker.(markers{2}{kk}){ii}(jj)/freq+ISI*seq)>1)) ||...   % the first two or three (depending on 2back or 3back) letters are not encoded by anything
+                   any(ismember( marker.(markers{2}{kk}){ii}(jj),marker.exclude{ii} ))  % exclude the entries listed in the exclude field
+                continue;
+            end
+            events(counter).type = sprintf('Encoded letter corresponding to a %s, %d back',markers{2}{kk},seq);
+            events(counter).value = {sprintf('L%d_%s',seq,TriggerNames{2}{kk})};
+            events(counter).duration = 1;
+            [~,i]=min(abs(time-marker.(markers{1}{kk}){ii}(jj)/freq+ISI*seq));
+            events(counter).time = time(i);
+            events(counter).offset = 0;
+            counter = counter +1;
+        end
     end
     
-    % false alarms
-    nFA =  numel(marker.L_false{ii});
-    for jj = 1:nFA
-        events(counter).type = ['Letter before false alarm ' seq 'back'];
-        events(counter).value = {['L' seq '_f']};
-        events(counter).duration = 1;
-        events(counter).time = marker.L_false{ii}(jj)/freq;
-        events(counter).offset = 0;
-        counter = counter +1;
+    presslist=[marker.TP{ii}; marker.FP{ii}];
+
+    for kk=1:numel(markers{3})
+        nM =  numel(marker.(markers{3}{kk}){ii});
+        for jj = 1:nM
+            if any(and(presslist<marker.(markers{1}{kk}){ii}(jj),presslist>marker.(markers{1}{kk}){ii}(jj)-freq*ISI*seq))
+                continue;
+            end
+            events(counter).type = sprintf('clean buffer before a %s, %d back',markers{3}{kk},seq);
+            events(counter).value = {sprintf('L%d_%s',seq,TriggerNames{3}{kk})};
+            events(counter).duration = 1;
+            events(counter).time = marker.(markers{3}{kk}){ii}(jj)/freq;
+            events(counter).offset = 0;
+            counter = counter +1;
+        end
     end
-    nFA =  numel(marker.P_false{ii});
-    for jj = 1:nFA
-        events(counter).type = ['False alarm press ' seq 'back'];
-        events(counter).value = {['P' seq '_f']};
-        events(counter).duration = 1;
-        events(counter).time = marker.P_false{ii}(jj)/freq;
-        events(counter).offset = 0;
-        counter = counter +1;
-    end
+    
     
 end

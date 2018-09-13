@@ -16,7 +16,7 @@ switch file_opts.protocol
         marker = GP_find_triggers(fullfile(dirName,fileName), file_opts.rec.freq, file_opts.set.seqOrder);
 end
 
-marker = GP_clean_triggers(marker,file_opts);
+% marker = GP_clean_triggers(marker,file_opts);
 if nargout<1
     external_events = GP_create_triggers(marker, file_opts.rec.freq);
     

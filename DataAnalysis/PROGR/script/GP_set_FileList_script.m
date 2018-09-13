@@ -8,7 +8,7 @@
 datatype = {'PRE'};   % specifies which kind of data is analyzed
 % protocol = {'pilot','noStimH'};
 protocol = {'noStimH'};
-protocolCode = [   1];
+protocolCode = [1];
 subjectsToSkip = 7;
 
 opts_rec = 'noStim';     % specifies the parameters for EEG recording
