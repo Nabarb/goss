@@ -24,6 +24,9 @@ for jj=1:numel(protocol)
         end
         file=strsplit(outputfile{jj},'.');
         out=sprintf('%s.xlsx',file{1});
+        if exist(outputfile{jj},'file')
+            movefile(outputfile{jj},[outputfile{jj} '.old']);
+        end
         copyfile(templatefilename,out);
         xlswrite(out,array,'data');
 end
