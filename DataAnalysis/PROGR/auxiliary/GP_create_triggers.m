@@ -10,16 +10,19 @@ function events = GP_create_triggers(marker, freq)
 %  Encoding triggers, once a letter is presented to the subject it is encoded in its working
 %  memory. We monitor this event with the following set of triggers:
 %
-%   LN_WEN: letter presentation followed by a well encoded negative
-%   LN_BEN: letter presentation followed by a badly encoded negative
-%   LN_WEP: letter presentation followed by a well encoded positive
-%   LN_BEP: letter presentation followed by a badly encoded positive
+%   L[N]_WEN: letter presentation followed by a well encoded negative
+%   L[N]_BEN: letter presentation followed by a badly encoded negative
+%   L[N]_WEP: letter presentation followed by a well encoded positive
+%   L[N]_BEP: letter presentation followed by a badly encoded positive
 %
 %   An event is logged when a TP is preceded by an uniterrrupted buffer (ie without presses):
 %
-%   LN_BUFFN: buffer without a press in it
+%   L[N]_TPB: TP buffer without a press in it
+%   L[N]_FPB: FP buffer without a press in it
+%   L[N]_TNB: TN buffer without a press in it
+%   L[N]_FNB: FN buffer without a press in it
 %
-%   Where N is 2 or 3 depending on two back or three back
+%   Where [N] is 2 or 3 depending on two back or three back
 %
 %   Encoding markers are not logged if they are listed in the exclude field
 %   ok marjer input structure. In this field should be present all the
@@ -36,21 +39,21 @@ function events = GP_create_triggers(marker, freq)
 % Marianna Semprini
 % IIT, April 2018
 
-ISI = 2.5;
+ISI = 2.5;  % DA PARAMETRIZZARE!!!
 markers ={
             {'TP'   ,'TN'   ,'FP'   ,'FN'};
-            {'TP'   ,'TN'   ,'FP'   ,'FN'}
-            {'TP'}
+            {'TP'   ,'TN'   ,'FP'   ,'FN'};
+            {'TP'   ,'TN'   ,'FP'   ,'FN'};
             };
         
 TriggerNames =   {         
             {'TP'   ,'TN'   ,'FP'   ,'FN'};
             {'WEP'  ,'WEN'  ,'BEP'  ,'BEN'};
-            {'BUFF'}
+            {'TPB'   ,'TNB'   ,'FPB'   ,'FNB'};
             };
 
 counter = 1;
-for ii = 1:2
+for ii = 1:2 % 2 or 3 back
     seq = marker.seqType(ii);
     time = [];
 
@@ -91,7 +94,7 @@ for ii = 1:2
         nM =  numel(marker.(markers{3}{kk}){ii});
         for jj = 1:nM
             if any(and(presslist<marker.(markers{1}{kk}){ii}(jj),presslist>marker.(markers{1}{kk}){ii}(jj)-freq*ISI*seq))
-                continue;
+                continue; % if a press occured during the buffer, skip creating the marker
             end
             events(counter).type = sprintf('clean buffer before a %s, %d back',markers{3}{kk},seq);
             events(counter).value = {sprintf('L%d_%s',seq,TriggerNames{3}{kk})};
@@ -103,4 +106,4 @@ for ii = 1:2
     end
     
     
-end
+end %% ii, 2 or 3 back

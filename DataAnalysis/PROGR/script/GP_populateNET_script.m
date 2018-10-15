@@ -4,3 +4,4 @@ elements={'eeg','trigger'};
 templatefilename='X:\Net216Template.xlsx';
 outputfile={'X:\DATA\noStimH\CT_NoStimH_templ_mri.xlsx'};
 GP_Populate_Net(opts,outputfile,templatefilename,elements);
+copyfile(outputfile{1},'D:\Barban Federico\TMP data');
