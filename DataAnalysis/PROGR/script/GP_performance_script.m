@@ -4,31 +4,18 @@
 % IIT, April 2018
 
 GP_set_FileList_script; % load opts structure
-performance=struct('dPrime',[],'hit',[],'fa',[],...
-    'resp3back',[],'resp2back',[]);
+performance=cell2struct(cell(length(fieldnames(GP_performance_compute)),1),fieldnames(GP_performance_compute));
 
 for ii=1:length(opts)
     file_opts = opts(ii);
-    perf_.dPrime = nan(length(file_opts.set),2);
-    perf_.hit = nan(length(file_opts.set),2);
-    perf_.fa = nan(length(file_opts.set),2);
-    perf_.resp2back={};
-    perf_.resp3back={};
-    
+    perf_=cell2struct(cell(length(fieldnames(GP_performance_compute)),1),fieldnames(GP_performance_compute));
     
     for ff = 1:length(file_opts.set)
         
         file_opts_=file_opts;
         file_opts_.set = file_opts.set(ff);
         perf = GP_performance_compute(file_opts_);
-        
-        for nn=fieldnames(perf)'
-            perf_.(nn{:})(ff,:) = perf.(nn{:});
-        end
-        
-        %         perf_.dPrime(ff,:) = perf.dPrime;
-        %         perf_.hit(ff,:) = perf.hit;
-        %         perf_.fa(ff,:) = perf.fa;
+        perf_=appendfields(perf_,perf);
     end
     performance=appendfields(performance,perf_);
     dirs = GP_dir_opts_REPOSITORY(file_opts.protocol);

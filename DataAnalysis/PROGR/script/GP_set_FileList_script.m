@@ -9,7 +9,7 @@ datatype = {'PRE'};   % specifies which kind of data is analyzed
 % protocol = {'pilot','noStimH'};
 protocol = {'noStimH'};
 protocolCode = [1];
-subjectsToSkip = [7,17];
+subjectsToSkip = [7];
 
 opts_rec = 'noStim';     % specifies the parameters for EEG recording
 opts_task = 'noStim';
@@ -65,6 +65,7 @@ for jj=1:numel(protocol)
     dirs=GP_dir_opts_REPOSITORY(protocol{jj});
     setsName = dir(dirs.dir_rawEEGData);
     setsName = setsName(3:end);
+    setsName = setsName([setsName.isdir]);
     data_=cell(numel(setsName),3);
     data_(:,2)={setsName.name};
     for ii=1:numel(setsName)
