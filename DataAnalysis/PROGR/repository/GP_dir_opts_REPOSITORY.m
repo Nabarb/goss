@@ -24,7 +24,13 @@ switch(User)
         dirs.root_analysis = 'C:\Users\MSemprini\Documents\_WORK\projects\GOSSWEILER\DATA\analysis';  % root data for analysis
         % dirs.root_plot = 'Y:\SW_&_DATA\BIMFERR_MARI\DATA\figures';                                    % root data for images
         
-    case 'Fede'
+    case 'Fede' 
+        % root folder for raw acquisitions
+        dirs.root_raw  = 'X:\DATA\_RAW';
+        % root folder for data analysis
+        dirs.root_analysis = 'X:\DATA\_RAW';
+        % dirs.root_plot = 'Y:\SW_&_DATA\BIMFERR_MARI\DATA\figures';
+    case 'fbarban'
         % root folder for raw acquisitions
         dirs.root_raw  = 'X:\DATA\_RAW';
         % root folder for data analysis

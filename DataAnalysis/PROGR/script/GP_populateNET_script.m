@@ -2,6 +2,6 @@
 GP_set_FileList_script;
 elements={'eeg','trigger'};
 templatefilename='X:\DATA\Net220Template.xlsx';
-outputfile={'C:\Users\MSemprini\Fondazione Istituto Italiano Tecnologia\Federico Barban - KinEEG\Data\Connectivity\RS_PRE_KinEEG_true_mri.xlsx'};
+outputfile={'X:\DATA\noStimH\CT_NoStimH_templ_mri.xlsx'};
 GP_Populate_Net(opts,outputfile,templatefilename,elements);
-copyfile(outputfile{1},'D:\Barban Federico\TMP data');
+copyfile(outputfile{1},'D:\Barban Federico\EEG\_GOSSWEILER');
