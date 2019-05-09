@@ -15,6 +15,7 @@ if nargin == 0
                  'FNr',nan(1,2),...
                  'PPV',nan(1,2),...
                  'ACC',nan(1,2),...
+                 'RT' ,nan(1,2),...
                  'dPrime',nan(1,2));
     return
 end
@@ -36,15 +37,14 @@ else % 3back task
     ind2 = 1;
 end
 
-performance = nan(2,4); % [TP TN FP FN, 2 and 3 back]
 index = [ind1, ind2];
-taskType={'resp2back','resp3back'};
 for ii = 1:2
     ind = index(ii);
     TP = numel(marker.TP{ii}); % true positive, TP
     TN = numel(marker.TN{ii}); % true negative, TN
     FP = numel(marker.FP{ii}); % false positive, FP
     FN = numel(marker.FN{ii}); % false negative, FN
+    RT = mean(marker.RT{ii}); % reaction time, RT
 
     P = marker.stimNumber(ii); % positive condition
     A = marker.seqLength(ii); % all conditions
@@ -64,6 +64,8 @@ for ii = 1:2
     perf.PPV(ind) = TP/(TP + FP);
     % accuracy
     perf.ACC(ind) = (TP + TN)/A;
+    % reaction time
+    perf.RT(ind) = RT;
     
 %     % negative predictive value
 %     perf.NPV(ind) = TN/(TN + FN);
@@ -72,8 +74,7 @@ for ii = 1:2
 %     % false omission rate
 %     perf.FOR(ind) = FN/(FN + TN);
     
-    
-    
+        
     %%%%%%%%%%%%%%%%%
     %%%%% D-Prime
     %%%%% Dprime = Z(TPr) - Z(FPr) - the distance between hits and false alarms
@@ -100,4 +101,4 @@ end
 [dirName, fileName] = GP_file_opts_REPOSITORY(file_opts, 'performance');
 save(fullfile(dirName, fileName), 'perf');
 
-%% pOPULATION ANALYSIS
+%% POPULATION ANALYSIS
