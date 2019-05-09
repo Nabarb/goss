@@ -63,6 +63,6 @@ switch(protocol)
 end
 
 %% Retrieve needed values from the recordings/files and checks that everything matches
- GP_check_params(file_opts);
+%  GP_check_params(file_opts);
      
  

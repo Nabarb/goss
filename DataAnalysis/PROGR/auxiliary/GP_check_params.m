@@ -5,7 +5,7 @@ function GP_check_params(DesiredParams)
 % check_struct_differences to check for mismatch between structures
 %
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Very custom made for this applicartion!     %
+% Very custom made for this application!     %
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 file_opts=DesiredParams;
 for ii=1:numel(DesiredParams.set)
@@ -23,6 +23,9 @@ for ii=1:numel(DesiredParams.set)
     
     task.ITI = bh.data.itiTime;
     task.Lduration = bh.data.trialTime;
-    check_struct_differences(DesiredParams.task,task)
+    
+    taskCheck.ITI = DesiredParams.ITI;
+    taskCheck.Lduration = DesiredParams.Lduration;
+    check_struct_differences(taskCheck,task)
     
 end

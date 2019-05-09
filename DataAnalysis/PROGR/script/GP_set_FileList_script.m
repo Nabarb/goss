@@ -7,7 +7,7 @@
 % -------------------------
 datatype = {'PRE'};   % specifies which kind of data is analyzed
 % protocol = {'pilot','noStimH'};
-protocol = {'noStimH'};
+protocol = {'GOSS100_noStimH'};
 protocolCode = [1];
 subjectsToSkip = [7];
 

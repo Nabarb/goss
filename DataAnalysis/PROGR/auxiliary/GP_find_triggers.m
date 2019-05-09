@@ -81,10 +81,52 @@ marker.FP{2} = [];
 marker.TN{1} = [];
 marker.TN{2} = [];
 
+marker.reactTime{1} = [];
+marker.reactTime{2} = [];
+
 press_list = [];
 
 marker.TP{1} = [];
 marker.TP{2} = [];
+for ii = 1:length(S_ts)
+    
+    % check numStim:
+    if length(S_ts) ~= 64
+        disp(['Attention: number of stimuli = ' length(S_ts)]);
+    end
+    
+    if S_ts(ii) < E_ts(2)
+        pos = 1;
+    else
+        pos = 2;
+    end
+    
+   
+    % if a press is detected in the next two seconds, log a hit
+    a = S_ts(ii); b = S_ts(ii)+ITI*freq;    % CONTROLLARE FREQUENZA DI ACQUISIZIONE
+%     p = find((P_ts>=a)&(P_ts<=b),1);        % for each stimulus, checks if a press occured after it
+    p = find((P_ts>=a)&(P_ts<=b));        % for each stimulus, checks if a press occured after it
+    if numel(p)>1                           % check if there are two presses within the same trial
+        P_ts(p(2:end)) = [];
+        p = p(1);
+    end
+    press_list = [press_list p];            % In which case it is added to the press list (ie indexes of the rightly done presses)
+    
+    if ~isempty(p)                          % if a press occurred, the marker is added to the TP list
+        % hit
+        tmp = marker.TP{pos};
+        marker.TP(pos) = {[tmp; S_ts(ii)]};
+        
+        rt = marker.TP{pos} - S_ts(ii);
+        tmp = marker.reactTime{pos};
+        marker.reactTime(pos) = {[tmp; rt]};
+        
+    else                                    % else to the FN
+        % miss
+        tmp = marker.FN{pos};
+        marker.FN(pos) = {[tmp; S_ts(ii)]};
+    end
+end
 
 marker.FN{1} = [];
 marker.FN{2} = [];

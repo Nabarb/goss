@@ -18,10 +18,11 @@ for ii=1:length(opts)
         perf_=appendfields(perf_,perf);
     end
     performance=appendfields(performance,perf_);
+    PopPerf=GP_population_BH_analysis(performance);
+    
     dirs = GP_dir_opts_REPOSITORY(file_opts.protocol);
     fileName = [opts(ii).protocol, '_', opts(ii).datatype];
-    save(fullfile(dirs.dir_performance, fileName),'perf_');
-    PopPerf=GP_population_BH_analysis(performance);
+    save(fileName,'perf_','PopPerf');
 end
 
 function struct=appendfields(struct1,struct2)

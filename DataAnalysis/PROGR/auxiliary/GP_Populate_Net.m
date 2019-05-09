@@ -2,7 +2,7 @@ function GP_Populate_Net(file_opts,outputfile,templatefilename,elements)
 
 %
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Very custom made for this applicartion!     %
+% Very custom made for this application!     %
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %% writes everything to net configuration file

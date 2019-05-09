@@ -21,7 +21,7 @@ switch(User)
     case 'MSemprini'
 %         dirs.root_raw = 'C:\Users\MSemprini\Documents\_WORK\projects\GOSSWEILER\DATA\PILOT\RAWDATA';    % root data for raw acquisitions                                                             % root raw data
         dirs.root_raw  = 'X:\DATA\_RAW';        
-        dirs.root_data = 'C:\Users\MSemprini\Documents\_WORK\projects\GOSSWEILER\DATA\PILOT\analysis';  % root data for analysis
+        dirs.root_analysis = 'C:\Users\MSemprini\Documents\_WORK\projects\GOSSWEILER\DATA\analysis';  % root data for analysis
         % dirs.root_plot = 'Y:\SW_&_DATA\BIMFERR_MARI\DATA\figures';                                    % root data for images
         
     case 'Fede'
@@ -40,12 +40,12 @@ switch(User)
 end
 
 switch(protocolType)
-    case 'pilot'
+    case 'GOSS000_pilot'
         dir_opts.dir_rawEEGData = fullfile(dirs.root_raw, 'PILOT', localPath);                       % contains raw EEG Data
-        dir_opts.dir_performance = fullfile(dirs.root_analysis,'PILOT', localPath);
+        dir_opts.dir_performance = fullfile(dirs.root_analysis,'GOSS000_PILOT', localPath);
         
-    case 'noStimH'
-        dir_opts.dir_rawEEGData = fullfile(dirs.root_raw, 'noStimH', localPath);                       % contains raw EEG Data
+    case 'GOSS100_noStimH'
+        dir_opts.dir_rawEEGData = fullfile(dirs.root_raw, 'GOSS100_noStimH', localPath);                       % contains raw EEG Data
         dir_opts.dir_performance = fullfile(dirs.root_analysis,'noStimH', localPath);
 end
 
