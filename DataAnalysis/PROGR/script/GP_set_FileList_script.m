@@ -7,13 +7,13 @@
 % -------------------------
 datatype = {'PRE'};   % specifies which kind of data is analyzed
 % protocol = {'pilot','noStimH'};
-protocol = {'GOSS100_noStimH'};
-protocolCode = [1];
+protocol = {'GOSS400_ShamH'};
+protocolCode = [4];
 subjectsToSkip = [7];
 
-opts_rec = 'noStim';     % specifies the parameters for EEG recording
-opts_task = 'noStim';
-opts_BH_analysis = 'noStim';
+opts_rec = 'Sham';     % specifies the parameters for EEG recording
+opts_task = 'Stim';
+opts_BH_analysis = 'Sham';
 opts_EEG_analysis = 'CT';
 
 % -------------------------
@@ -96,7 +96,7 @@ for jj = 1:numel(data)
     for ii=1:numel(opts_.set)
         opts__=opts_;
         opts__.set=opts__.set(ii);
-        [dirName, fileName]=GP_file_opts_REPOSITORY(opts__,'behavior');
+        [dirName, fileName] = GP_file_opts_REPOSITORY(opts__,'behavior');
         BH=load(fullfile(dirName, fileName), 'data');
         
         opts_.set(ii).seqOrder = [BH.data.seq1.back BH.data.seq2.back];

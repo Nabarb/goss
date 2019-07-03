@@ -53,6 +53,18 @@ switch(protocolType)
     case 'GOSS100_noStimH'
         dir_opts.dir_rawEEGData = fullfile(dirs.root_raw, 'GOSS100_noStimH', localPath);                       % contains raw EEG Data
         dir_opts.dir_performance = fullfile(dirs.root_analysis,'noStimH', localPath);
+        
+    case 'GOSS200_noStimHD'
+        dir_opts.dir_rawEEGData = fullfile(dirs.root_raw, 'GOSS200_noStimHD', localPath);                       % contains raw EEG Data
+        dir_opts.dir_performance = fullfile(dirs.root_analysis,'noStimHD', localPath);
+        
+    case 'GOSS300_StimH'
+        dir_opts.dir_rawEEGData = fullfile(dirs.root_raw, 'GOSS300_StimH', localPath);                       % contains raw EEG Data
+        dir_opts.dir_performance = fullfile(dirs.root_analysis,'StimH', localPath);
+        
+    case 'GOSS400_ShamH'
+        dir_opts.dir_rawEEGData = fullfile(dirs.root_raw, 'GOSS400_ShamH', localPath);                       % contains raw EEG Data
+        dir_opts.dir_performance = fullfile(dirs.root_analysis,'ShamH', localPath);
 end
 
 % dir_opts.dir_EEGData = fullfile(dirs.root_data, 'EMG');                             % contains processed EEG data
