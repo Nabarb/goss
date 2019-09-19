@@ -7,13 +7,13 @@
 % -------------------------
 datatype = {'PRE'};   % specifies which kind of data is analyzed
 % protocol = {'pilot','noStimH'};
-protocol = {'GOSS400_ShamH'};
-protocolCode = [4];
+protocol = {'GOSS100_noStimH'};
+protocolCode = [1];
 subjectsToSkip = [7];
 
-opts_rec = 'Sham';     % specifies the parameters for EEG recording
-opts_task = 'Stim';
-opts_BH_analysis = 'Sham';
+opts_rec = 'noStim';     % specifies the parameters for EEG recording
+opts_task = 'noStim';
+opts_BH_analysis = 'noStim';
 opts_EEG_analysis = 'CT';
 
 % -------------------------
