@@ -16,6 +16,7 @@ if nargin == 0
                  'PPV',nan(1,2),...
                  'ACC',nan(1,2),...
                  'RT' ,nan(1,2),...
+                 'RT_all',nan(1,2),...
                  'dPrime',nan(1,2));
     return
 end
@@ -66,6 +67,7 @@ for ii = 1:2
     perf.ACC(ind) = (TP + TN)/A;
     % reaction time
     perf.RT(ind) = RT;
+    perf.RT_all(ind) = {marker.RT{ii}};
     
 %     % negative predictive value
 %     perf.NPV(ind) = TN/(TN + FN);

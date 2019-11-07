@@ -13,3 +13,7 @@ for ii=1:numel(opts)
     end
 end
 
+
+% NOTE THAT THIS SCRIPT WILL MAKE USE OF TWO MAGIC NUMBERS:
+% TH = xx s, trials in which response were given before TH were removed for TPr and TNr
+% ISI = xx s, inter stimulus interval now 2.5 s
