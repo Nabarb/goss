@@ -47,16 +47,16 @@ buffer3_list = [];
 for ii = 1:numel(condition_list)
     if ~isempty(strfind(condition_list{ii},'encoded')) % update analysis all well vs all bad
         update_list = [update_list ii];
-    elseif ~isempty(strfind(condition_list{ii},'responded')) % response analysis all well vs all bad
-        response_list = [response_list ii];
-    elseif~isempty(strfind(condition_list{ii},'Response')) % response analysis TP vs TN
-        tptn_list = [tptn_list ii];
     elseif~isempty(strfind(condition_list{ii},'Buffer')) % buffer analysis all well vs all bad
         if ~isempty(strfind(condition_list{ii},'2'))
             buffer2_list = [buffer2_list ii];
         elseif ~isempty(strfind(condition_list{ii},'3'))
             buffer3_list = [buffer3_list ii];
         end
+    elseif ~isempty(strfind(condition_list{ii},'responded')) % response analysis all well vs all bad
+        response_list = [response_list ii];
+    elseif~isempty(strfind(condition_list{ii},'Response')) % response analysis TP vs TN
+        tptn_list = [tptn_list ii];
     end
 end
 
@@ -68,4 +68,11 @@ end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Run statistics
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% the following scripts perform ANOVA on data organized in different ways
+% (see the "within" structure in each script)
+% by commenting or uncommenting portion of the scripts it is possible to
+% save data structure and/or figures
 GP_bandPower_statistics
+GP_bandPower_statistics_23backseparated
+
+

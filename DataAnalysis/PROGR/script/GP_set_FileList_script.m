@@ -6,15 +6,15 @@
 %% Define the analysis protocol
 % -------------------------
 datatype = {'PRE'};   % specifies which kind of data is analyzed ('PRE', 'POST', 'STIM')
-% protocol = {'GOSS000_pilot','GOSS100_noStimH','GOSS200_noStimHD','GOSS300_StimH', 'GOSS400_ShamH'};
-protocol = {'GOSS300_StimH'};
-protocolCode = [3]; % 0:4
+% protocol = {'GOSS000_pinolot','GOSS100_noStimH','GOSS200_noStimHD','GOSS300_StimH', 'GOSS400_ShamH'};
+protocol = {'GOSS100_noStimH'};
+protocolCode = [1]; % 0:4
 subjectsToSkip = [6 7 10 22 24]; % for GOSS100_noStimH
 % subjectsToSkip =  [];
 
-opts_rec = 'Stim';     % specifies the parameters for EEG recording
-opts_task = 'Stim';
-opts_BH_analysis = 'Stim';
+opts_rec = 'noStim';     % specifies the parameters for EEG recording
+opts_task = 'noStim';
+opts_BH_analysis = 'nosStim';
 opts_EEG_analysis = 'CT';
 
 % -------------------------

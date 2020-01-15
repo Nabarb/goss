@@ -58,14 +58,14 @@ for ii = 1:2 % 2 or 3 back
     seq = marker.seqType(ii);
     time = [];
 
-    for kk=1:2 % only TP and TN
+    for kk=1:numel(markers{1})
         nM =  numel(marker.(markers{1}{kk}){ii});
         for jj = 1:nM
             if (kk==1) && (marker.RT{ii}(jj)< TH) % response given before  TH ms after letter presentation removed (data contain motor act)
                 continue;
             end
             events(counter).type = sprintf('reponse on %s, %d back',markers{1}{kk},seq);
-            events(counter).value = {sprintf('R%d_%s',seq,TriggerNames{1}{kk})};
+            events(counter).value = {sprintf('L%d_%s',seq,TriggerNames{1}{kk})};
             events(counter).duration = 1;
             events(counter).time = marker.(markers{1}{kk}){ii}(jj)/freq;
             events(counter).offset = 0;
