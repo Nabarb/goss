@@ -73,34 +73,34 @@ for curr_roi =1:nROI
                 data_tmp(nCond,:,:,k) = tmp;
             end
         end
-        
-        % plot data
-        for ff = 3:6
-            data_m = squeeze(nanmean(data_tmp(:,ff-2,:,:),3));
-            data_s = squeeze(nanstd(data_tmp(:,ff-2,:,:),0,3));
-            data_plot = data_m+(data_s.*data_m./abs(data_m));
-            
-            subplot(2,2,ff-2)
-            bar(data_plot,'grouped','k','barwidth',0.1);
-            hold on
-            bar(data_m,'grouped');
-            ax = gca;
-            ax.YGrid = 'on';
-            if numel(curr_list)>2
-            ax.XTickLabel = [condition_list(curr_list(1)),condition_list(curr_list(2)),condition_list(curr_list(3)),condition_list(curr_list(4))];
-            else
-                ax.XTickLabel = [condition_list(curr_list(1)),condition_list(curr_list(2))];
-            end
-            ax.XTickLabelRotation = 20;
-            xlabel('Conditions');
-            ylabel('Average Band Power');
-            title([bands(ff).label ' band'])
-        end
-        
-        % save and close figure
-        saveas(gcf,[group.seed_info(curr_roi).name '_' figtitle],'png');
-        close gcf;
-        
+%         
+%         % plot data
+%         for ff = 3:6
+%             data_m = squeeze(nanmean(data_tmp(:,ff-2,:,:),3));
+%             data_s = squeeze(nanstd(data_tmp(:,ff-2,:,:),0,3));
+%             data_plot = data_m+(data_s.*data_m./abs(data_m));
+%             
+%             subplot(2,2,ff-2)
+%             bar(data_plot,'grouped','k','barwidth',0.1);
+%             hold on
+%             bar(data_m,'grouped');
+%             ax = gca;
+%             ax.YGrid = 'on';
+%             if numel(curr_list)>2
+%             ax.XTickLabel = [condition_list(curr_list(1)),condition_list(curr_list(2)),condition_list(curr_list(3)),condition_list(curr_list(4))];
+%             else
+%                 ax.XTickLabel = [condition_list(curr_list(1)),condition_list(curr_list(2))];
+%             end
+%             ax.XTickLabelRotation = 20;
+%             xlabel('Conditions');
+%             ylabel('Average Band Power');
+%             title([bands(ff).label ' band'])
+%         end
+%         
+%         % save and close figure
+%         saveas(gcf,[group.seed_info(curr_roi).name '_' figtitle],'png');
+%         close gcf;
+%         
         
         % build dataset for RANOVA
         if analysis <4 % encoding and response
@@ -140,16 +140,16 @@ for curr_roi =1:nROI
     end 
     
     %%% Plot statistics
-    res = zeros(3,3);
-    for c = 1:5
-        idx = find(out(curr_roi,c).pValGG < 0.01);
-        res(c,idx) = 1;
-    end
-    figure(100+curr_roi);
-    imagesc(res);
-    set(gca, 'xtick',[1:3], 'xticklabel', with_factors, 'ytick', [1:5], 'yticklabel', {'update','resp','trueresp','mant2','mant3'});
-    title(group.seed_info(curr_roi).name)
-    saveas(gcf,group.seed_info(curr_roi).name,'png');
-    close gcf;
+%     res = zeros(3,3);
+%     for c = 1:5
+%         idx = find(out(curr_roi,c).pValGG < 0.01);
+%         res(c,idx) = 1;
+%     end
+%     figure(100+curr_roi);
+%     imagesc(res);
+%     set(gca, 'xtick',[1:3], 'xticklabel', with_factors, 'ytick', [1:5], 'yticklabel', {'update','resp','trueresp','mant2','mant3'});
+%     title(group.seed_info(curr_roi).name)
+%     saveas(gcf,group.seed_info(curr_roi).name,'png');
+%     close gcf;
 end
 

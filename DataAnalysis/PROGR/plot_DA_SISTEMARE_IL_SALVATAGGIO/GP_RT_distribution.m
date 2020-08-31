@@ -21,9 +21,9 @@ edges = 0:0.05:2.5;
 figure
 for ii = 1:2
     subplot(2,1,ii)
-    histogram(all_rt{ii},edges)
+%     set(gca,'ygrid','on','ylim',[0:0.02:0.1],'fontsize',12)
+    h = histogram(all_rt{ii},edges,'Normalization','probability');
     title(['Reaction Time Distribution during ' num2str(ii+1) '-back']);
-    set(gca,'ygrid','on','ylim',[0 60],'fontsize',12)
     ylabel('RT distribution')
 end
 xlabel('RT [s]')

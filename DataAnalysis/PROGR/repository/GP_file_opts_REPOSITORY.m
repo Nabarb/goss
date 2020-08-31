@@ -11,6 +11,7 @@ function [dirName, fileName] = GP_file_opts_REPOSITORY(file_opts, type)
 % IIT, April 2018
 
 dirs = GP_dir_opts_REPOSITORY(file_opts.set.local,file_opts.protocol);
+% dirs = GP_dir_opts_REPOSITORY(file_opts.protocol); %% for GOSS200_noStimHD_controls
 
 switch type
     

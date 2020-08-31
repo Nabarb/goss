@@ -6,15 +6,15 @@
 %% Define the analysis protocol
 % -------------------------
 datatype = {'PRE'};   % specifies which kind of data is analyzed ('PRE', 'POST', 'STIM')
-% protocol = {'GOSS000_pinolot','GOSS100_noStimH','GOSS200_noStimHD','GOSS300_StimH', 'GOSS400_ShamH'};
-protocol = {'GOSS100_noStimH'};
-protocolCode = [1]; % 0:4
-subjectsToSkip = [6 7 10 22 24]; % for GOSS100_noStimH
+% protocol = {'GOSS000_pilot','GOSS100_noStimH','GOSS200_noStimHD','GOSS300_StimH', 'GOSS400_ShamH'};
+protocol = {'GOSS400_ShamH'};
+protocolCode = [4]; % 0:4
+subjectsToSkip = []; %[6 7 10 22 24]; % for GOSS100_noStimH
 % subjectsToSkip =  [];
 
-opts_rec = 'noStim';     % specifies the parameters for EEG recording
-opts_task = 'noStim';
-opts_BH_analysis = 'nosStim';
+opts_rec = 'Stim';     % specifies the parameters for EEG recording
+opts_task = 'Stim';
+opts_BH_analysis = 'Stim';
 opts_EEG_analysis = 'CT';
 
 % -------------------------
@@ -100,7 +100,12 @@ for jj = 1:numel(data)
         [dirName, fileName] = GP_file_opts_REPOSITORY(opts__,'behavior');
         BH=load(fullfile(dirName, fileName), 'data');
         
-        opts_.set(ii).seqOrder = [BH.data.seq1.back BH.data.seq2.back];
+         try
+            opts_.set(ii).seqOrder = [BH.data.seq1.back BH.data.seq2.back];
+        catch % mat file could be missing, hopefully hafles structure was saved
+            BH=load(fullfile(dirName, fileName), 'handles');
+            opts_.set(ii).seqOrder = [BH.handles.seq1.back BH.handles.seq2.back];
+        end
     end
     
     opts(jj)=opts_;

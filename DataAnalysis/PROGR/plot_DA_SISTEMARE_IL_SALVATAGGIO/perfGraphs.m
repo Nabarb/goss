@@ -1,4 +1,5 @@
-load(fullfile('X:\DATA\_RAW\GOSS100_noStimH','noStimH_PRE.mat'));
+% load(fullfile('X:\DATA\_RAW\GOSS100_noStimH','noStimH_PRE.mat'));
+load('GOSS100_noStimH_PRE.mat');
 %% True pos rate vs true neg rate
 plot(perf_.TPr(:,2),perf_.TNr(:,2),'go')
 hold on

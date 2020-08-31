@@ -2,22 +2,16 @@
 %%% Build dataset
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-for analysis = 1:5
+for analysis = 1:3
     switch analysis
         case 1  %%%%%% ANALYSIS OF "UPDATING" %%%%%%
             curr_list = update_list;
             cond = condition(1);
-        case 2  %%%%%% ANALYSIS OF "RESPONSE" %%%%%%
-            curr_list = response_list;
-            cond = condition(4);
-        case 3  %%%%%% ANALYSIS OF "UPDATING" %%%%%%
-            curr_list = tptn_list;
-            cond = condition(4);
-        case 4  %%%%%% ANALYSIS OF "MANTAINANCE" %%%%%%
-            curr_list = buffer2_list;
+        case 2  %%%%%% ANALYSIS OF "MANTAINANCE" %%%%%%
+            curr_list = maintenance_list;
             cond = condition(2);
-        case 5  %%%%%% ANALYSIS OF "MANTAINANCE" %%%%%%
-            curr_list = buffer3_list;
+        case 3  %%%%%% ANALYSIS OF "RESPONSE" %%%%%%
+            curr_list = response_list;
             cond = condition(3);
     end
     for ll = 1:numel(curr_list)
@@ -50,20 +44,14 @@ for analysis = 1:5
     end
     switch analysis
         case 1
-            updating_power = band_power;
-            save(fullfile(saveFolder,'updating_power'),'updating_power');
+            update_power = band_power;
+            save(fullfile(saveFolder,'update_power'),'update_power');
         case 2
+            maintenance_power = band_power;
+            save(fullfile(saveFolder,'maintenance_power'),'maintenance_power');
+        case 3
             response_power = band_power;
             save(fullfile(saveFolder,'response_power'),'response_power');
-        case 3
-            trueresponse_power = band_power;
-            save(fullfile(saveFolder,'trueresponse_power'),'trueresponse_power');
-        case 4
-            maintainance2B_power = band_power;
-            save(fullfile(saveFolder,'maintainance2B_power'),'maintainance2B_power');
-        case 5
-            maintainance3B_power = band_power;
-            save(fullfile(saveFolder,'maintainance3B_power'),'maintainance3B_power');
     end
     clear band_power tmp;
 end

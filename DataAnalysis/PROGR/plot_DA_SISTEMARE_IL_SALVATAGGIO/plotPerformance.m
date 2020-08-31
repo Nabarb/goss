@@ -4,6 +4,15 @@ plotFolder = 'C:\Users\MSemprini\Documents\_WORK\projects\2017-2019_Gossweiler\S
 plotFolder = 'C:\Users\MSemprini\Documents\_WORK\projects\GOSSWEILER\DATA\analysis\noStimH';
 
 figure
+bar(100*perf_.ACC, 'grouped');
+title('Accuracy')
+legend('2-back', '3-back');
+xlabel('subjects');
+ylabel('Accuracy [%]');
+set(gca,'ygrid','on','fontsize',12,'ylim',[0 100]);
+saveas(gcf,fullfile(plotFolder,'TPr'),'jpg');
+
+figure
 bar(100*perf_.TPr, 'grouped');
 title('True Positive rate')
 legend('2-back', '3-back');

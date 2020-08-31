@@ -49,11 +49,9 @@ P_ts = [event((strcmp('Press', {event.type}))).sample];         % button press
 L_ts = [event((strcmp('Stimulus', {event.type}))).sample];      % letter presentation
 N_ts = [event((strcmp('S  2', {event.value}))).sample];         % Non stimulus
 
-%% clean triggers
-% removes those triggers where a press occurred either 500ms before letter
-% presentation or during the trial
-
-M = L_ts-P_ts';
+% mark those triggers where a press occurred either 500ms before letter
+% presentation (baseline for ERS/ERD) or during the trial
+M = P_ts'-L_ts;
 ind = and(M>bl*freq,M<ITI*freq);
 [~,cols]=find(ind);             % finds letters to remove
 marker.exclude{1}=L_ts(cols(cols<=130));
@@ -65,7 +63,7 @@ ExpTriggers=cat(1,event((strcmp('Experiment', {event.type}))).value);
 seqOrderTrigs=str2num(ExpTriggers(:,4))'; % str2double does not return an array for some reason but a single value
 
 if any(seqOrder~=seqOrderTrigs)     % checks if there is any difference with the one expected
-    warning('Sequence order detected from the triggers is diffferent from the one expected!!')
+    warning('Sequence order detected from the triggers is different from the one expected!!')
 end
 marker.seqType = seqOrder; % two or three back
 

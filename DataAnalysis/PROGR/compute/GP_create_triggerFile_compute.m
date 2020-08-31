@@ -18,7 +18,7 @@ end
 
 % marker = GP_clean_triggers(marker,file_opts);
 if nargout<1
-    external_events = GP_create_triggers(marker, file_opts.rec.freq);
+    [external_events, check] = GP_create_triggers(marker, file_opts.rec.freq);
     
     [dirName, fileName] = GP_file_opts_REPOSITORY(file_opts, 'trigger');
     save(fullfile(dirName, fileName), 'external_events');
